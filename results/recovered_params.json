@@ -1,0 +1,58 @@
+{
+  "assumptions": {
+    "mean_targets_per_trial": 4.0,
+    "floor_technique": "SemiDwell (Sec. 3.3.1 - requires no hand movement)",
+    "strokes_per_subselection": "unstated; 1 and 2 both reported",
+    "caveat": "estimated from published aggregate means, not from data; the authors released no dataset"
+  },
+  "swipe_activation_distance": {
+    "technique": "SemiSwipe",
+    "metric": "hand_movement_m",
+    "reported_mean": 1.47,
+    "floor_technique": "SemiDwell",
+    "floor_mean": 0.143,
+    "motion_attributable_to_the_trigger": 1.327,
+    "mean_subselections_per_trial": 4.1,
+    "estimates": {
+      "1_stroke(s)_per_subselection": {
+        "amplitude_per_stroke": 0.3237
+      },
+      "2_stroke(s)_per_subselection": {
+        "amplitude_per_stroke": 0.1618
+      }
+    },
+    "threshold_recovered": "SWIPE_TRAVEL_M (never stated)"
+  },
+  "tilt_activation_angle_estimator_validation": {
+    "technique": "SemiTilt",
+    "metric": "hand_rotation_deg",
+    "reported_mean": 687.451,
+    "floor_technique": "SemiDwell",
+    "floor_mean": 23.167,
+    "motion_attributable_to_the_trigger": 664.284,
+    "mean_subselections_per_trial": 4.14,
+    "estimates": {
+      "1_stroke(s)_per_subselection": {
+        "amplitude_per_stroke": 160.4578,
+        "stated_by_paper": 30.0,
+        "observed_over_stated": 5.349
+      },
+      "2_stroke(s)_per_subselection": {
+        "amplitude_per_stroke": 80.2289,
+        "stated_by_paper": 30.0,
+        "observed_over_stated": 2.674
+      }
+    },
+    "threshold_recovered": "TILT_THRESHOLD_DEG (stated: 30 deg)"
+  },
+  "overshoot_check": {
+    "paper_claim_sec_8": "participants tended to swipe more than the activation threshold; SemiTilt had a similar but more critical issue",
+    "tilt_overshoot_factor_2_strokes": 2.674,
+    "tilt_overshoot_factor_1_stroke": 5.349,
+    "overshoot_confirmed_by_the_reported_means": true
+  },
+  "swipe_distance_best_estimate_m": {
+    "assuming_the_same_overshoot_as_tilt_(2.674x)": 0.0605
+  },
+  "value_used_in_this_repo": 0.1
+}

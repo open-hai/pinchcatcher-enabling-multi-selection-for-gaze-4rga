@@ -1,0 +1,13 @@
+dv,factor,greenhouse_geisser_epsilon,k_levels,n_subjects
+tct_ms,technique,0.9810186793114063,5,30
+tct_ms,target_number,0.924257500101489,3,30
+accidental_ratio,technique,0.8358520812936542,5,30
+accidental_ratio,target_number,0.9918028598390507,3,30
+error_rate,technique,0.9400387833177419,5,30
+error_rate,target_number,0.7447209947932205,3,30
+inverse_efficiency_ms,technique,0.737340151243612,5,30
+inverse_efficiency_ms,target_number,0.9021338080113382,3,30
+hand_movement_m,technique,0.9188270295366263,5,30
+hand_movement_m,target_number,0.9471608977036766,3,30
+hand_rotation_deg,technique,0.8718666659543494,5,30
+hand_rotation_deg,target_number,0.9994020843326965,3,30

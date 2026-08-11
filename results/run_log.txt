@@ -1,0 +1,871 @@
+### PinchCatcher reproduction - full run
+### 2026-08-11T06:40:46Z
+Python 3.11.15
+
+=== 1/5  inner-loop mechanism smoke test ===============================
+==============================================================================
+INNER-LOOP MECHANISM SMOKE TEST - PinchCatcher reimplementation
+Synthetic input traces only. No human data, no behavioural claims.
+==============================================================================
+[ok  ] pinch state bands (Sec. 3.2, Fig. 3)
+         bands_cm: {'full': '<2', 'semi': '2-7', 'release': '>=10'}
+[ok  ] 7-10 cm dead band holds the current state (Sec. 3.2)
+         dead_band_cm: [7.000000000000001, 10.0]
+         purpose: Sec. 3.2 - prevent false activation of the ungrouping function
+[ok  ] 3x gaze collider overlaps neighbours (Sec. 4.1.3)
+         ray_aimed_at: (0.55, 0.0, 13.5)
+         hits_with_visible_radius: []
+         hits_with_collider_radius: [0, 1]
+         chosen_by_min_angle: 1
+         chosen_by_scene_order: 0
+         overlap_lens_width_m: 0.2
+         consequence: the unstated tie-break selects a different object for the same gaze ray whenever it falls in the overlap
+[ok  ] angular sizes of object and collider at 13.5 m
+         visible_object_deg: 1.698
+         gaze_collider_deg: 5.09
+         ratio: 2.998
+[ok  ] SemiDwell fires at 500 ms, not before (Sec. 3.3.1)
+         threshold_ms: 500
+         at_590ms: [0]
+         at_390ms: []
+[ok  ] SemiDwell is gated by the semi-pinch quasi-mode (Sec. 3.3)
+         dh_distance_cm: 15
+         grouped: []
+[ok  ] SemiDwell does not re-toggle on a held stare (ASSUMED)
+         stare_ms: 2990
+         toggles: 1
+         assumption: on_collider_exit
+[ok  ] SemiSwipe: leftward only, past the travel threshold (Sec. 3.3.2)
+         travel_threshold_m_ASSUMED: 0.1
+         left_0.145m: [0]
+         right_0.145m: []
+         left_0.070m: []
+         caveat: the paper never states the swipe distance; this threshold is the single most load-bearing assumption in SemiSwipe
+[ok  ] SemiTilt: 30 deg hand, 3x geared indicator (Sec. 3.3.3)
+         hand_threshold_deg: 30.0
+         gain: 3.0
+         indicator_at_10deg_hand: 30.0
+         indicator_sweep_at_threshold: 90.0
+[ok  ] SemiNDH: NDH pinch click while DH holds semi (Sec. 3.3.4)
+         with_semi: [0]
+         without_semi: []
+[ok  ] FullDH baseline: NDH full pinch is the mode (Sec. 4.1.1)
+         with_ndh_mode: [0]
+         without: []
+         assumption: ndh_release_then_dh_full_pinch
+[ok  ] full-release pinch ungroups everything (Sec. 3.2)
+         events: ['mode_enter', 'group', 'mode_exit', 'ungroup_all']
+[ok  ] trial ends on a 250 ms full pinch (Sec. 4.2, Fig. 8)
+         hold_required_ms: 250
+         ended_after_140ms: None
+         ended_after_290ms: 850.0
+         grouped_at_end: [0]
+[ok  ] all five techniques group the gazed target
+         SemiDwell: [0]
+         SemiSwipe: [0]
+         SemiTilt: [0]
+         SemiNDH: [0]
+         FullDH: [0]
+[ok  ] stimulus layout generator (Sec. 4.1.2)
+         objects: 40
+         targets: 6
+         distractors: 34
+         window_m: (15.0, 6.0)
+         lattice: 16x7
+         cells_left_empty: 72
+[ok  ] design and counterbalancing generator (Sec. 4.1.2)
+         trials_per_participant: 225
+         sequences: 10
+         participants_per_sequence: 3.0
+         each_technique_in_each_position: [6]
+[ok  ] metric definitions (Sec. 4.3)
+         asr(2 of 8): 25.0
+         error_rate(1 missed,1 distractor,4 grouped): 50.0
+         ie(6000ms, 80%): 7500.0
+         sus_mean: 5.3333
+         path_m: 2.0
+         undefined_cases: ['asr with zero subselections', 'error rate with an empty final group']
+[ok  ] ratio metrics are denominator-coupled to target number (Sec. 4.3)
+         one_accident_per_trial_ratio_pct: {2: 33.33, 4: 20.0, 6: 14.29}
+         constant_per_target_accident_rate_ratio_pct: {2: 0.0, 4: 0.0, 6: 0.0}
+         implication: the accidental subselection ratio is not scale free across the target-number factor
+[ok  ] palm translation / rotation logging (Sec. 4.3)
+         path_length_m: 0.1
+         rotation_total_deg: 20.0
+         definition: Sec. 4.3 - palm translation and rotation per frame
+------------------------------------------------------------------------------
+19/19 mechanism tests passed
+wrote results/smoke_test.json
+
+=== 2/5  internal-consistency audit of the paper's printed numbers =====
+==============================================================================
+INTERNAL CONSISTENCY AUDIT - PinchCatcher (CHI '25, 10.1145/3706598.3713530)
+Recomputes the paper's printed numbers against each other.
+No dataset was released, so nothing here is recomputed from raw data.
+==============================================================================
+[PASS] df/epsilon consistency: tct x target_number (Sec. 5.1)
+         epsilon_from_df1: 0.8735
+         epsilon_from_df2: 0.873672
+         difference: 0.000172
+         epsilon_lower_bound: 0.5
+         implied_N: 30
+[PASS] df/epsilon consistency: tct x technique (Sec. 5.1)
+         epsilon_from_df1: 0.67625
+         epsilon_from_df2: 0.676353
+         difference: 0.000103
+         epsilon_lower_bound: 0.25
+         implied_N: 30
+[PASS] df/epsilon consistency: tct x interaction (Sec. 5.1)
+         epsilon_from_df1: 0.65925
+         epsilon_from_df2: 0.659246
+         difference: 4e-06
+         epsilon_lower_bound: 0.125
+         implied_N: 30
+[PASS] df/epsilon consistency: tct_error_free x target_number (Sec. 5.1)
+         epsilon_from_df1: 0.831
+         epsilon_from_df2: 0.830897
+         difference: 0.000103
+         epsilon_lower_bound: 0.5
+         implied_N: 30
+[PASS] df/epsilon consistency: tct_error_free x technique (Sec. 5.1)
+         epsilon_from_df1: 0.6885
+         epsilon_from_df2: 0.68856
+         difference: 6e-05
+         epsilon_lower_bound: 0.25
+         implied_N: 30
+[PASS] df/epsilon consistency: tct_error_free x interaction (Sec. 5.1)
+         epsilon_from_df1: 0.59925
+         epsilon_from_df2: 0.599293
+         difference: 4.3e-05
+         epsilon_lower_bound: 0.125
+         implied_N: 30
+[PASS] df/epsilon consistency: accidental_ratio x technique (Sec. 5.2)
+         epsilon_from_df1: 0.7815
+         epsilon_from_df2: 0.781388
+         difference: 0.000112
+         epsilon_lower_bound: 0.25
+         implied_N: 30
+[PASS] df/epsilon consistency: accidental_ratio x target_number (Sec. 5.2)
+         epsilon_from_df1: 0.87
+         epsilon_from_df2: 0.870155
+         difference: 0.000155
+         epsilon_lower_bound: 0.5
+         implied_N: 30
+[PASS] df/epsilon consistency: accidental_ratio x interaction (Sec. 5.2)
+         epsilon_from_df1: 0.6225
+         epsilon_from_df2: 0.62253
+         difference: 3e-05
+         epsilon_lower_bound: 0.125
+         implied_N: 30
+[PASS] df/epsilon consistency: error_rate x technique (Sec. 5.3)
+         epsilon_from_df1: 0.552
+         epsilon_from_df2: 0.551922
+         difference: 7.8e-05
+         epsilon_lower_bound: 0.25
+         implied_N: 30
+[PASS] df/epsilon consistency: error_rate x target_number (Sec. 5.3)
+         epsilon_from_df1: 0.878
+         epsilon_from_df2: 0.877793
+         difference: 0.000207
+         epsilon_lower_bound: 0.5
+         implied_N: 30
+[PASS] df/epsilon consistency: error_rate x interaction (Sec. 5.3)
+         epsilon_from_df1: 0.401375
+         epsilon_from_df2: 0.401345
+         difference: 3e-05
+         epsilon_lower_bound: 0.125
+         implied_N: 30
+[PASS] df/epsilon consistency: inverse_efficiency x technique (Sec. 5.4)
+         epsilon_from_df1: 0.6515
+         epsilon_from_df2: 0.651466
+         difference: 3.4e-05
+         epsilon_lower_bound: 0.25
+         implied_N: 30
+[PASS] df/epsilon consistency: inverse_efficiency x target_number (Sec. 5.4)
+         epsilon_from_df1: 0.8875
+         epsilon_from_df2: 0.887397
+         difference: 0.000103
+         epsilon_lower_bound: 0.5
+         implied_N: 30
+[PASS] df/epsilon consistency: inverse_efficiency x interaction (Sec. 5.4)
+         epsilon_from_df1: 0.6145
+         epsilon_from_df2: 0.614444
+         difference: 5.6e-05
+         epsilon_lower_bound: 0.125
+         implied_N: 30
+[PASS] df/epsilon consistency: hand_movement x technique (Sec. 5.5)
+         epsilon_from_df1: 0.33475
+         epsilon_from_df2: 0.334716
+         difference: 3.4e-05
+         epsilon_lower_bound: 0.25
+         implied_N: 30
+[PASS] df/epsilon consistency: hand_movement x target_number (Sec. 5.5)
+         epsilon_from_df1: 0.634
+         epsilon_from_df2: 0.634138
+         difference: 0.000138
+         epsilon_lower_bound: 0.5
+         implied_N: 30
+[PASS] df/epsilon consistency: hand_movement x interaction (Sec. 5.5)
+         epsilon_from_df1: 0.2575
+         epsilon_from_df2: 0.257522
+         difference: 2.2e-05
+         epsilon_lower_bound: 0.125
+         implied_N: 30
+[PASS] df/epsilon consistency: hand_rotation x technique (Sec. 5.6)
+         epsilon_from_df1: 0.338
+         epsilon_from_df2: 0.337922
+         difference: 7.8e-05
+         epsilon_lower_bound: 0.25
+         implied_N: 30
+[PASS] df/epsilon consistency: hand_rotation x target_number (Sec. 5.6)
+         epsilon_from_df1: 0.702
+         epsilon_from_df2: 0.701966
+         difference: 3.4e-05
+         epsilon_lower_bound: 0.5
+         implied_N: 30
+[PASS] df/epsilon consistency: hand_rotation x interaction (Sec. 5.6)
+         epsilon_from_df1: 0.23375
+         epsilon_from_df2: 0.233767
+         difference: 1.7e-05
+         epsilon_lower_bound: 0.125
+         implied_N: 30
+[PASS] all 21 F tests imply the same N=30 design and one epsilon per test
+         max_epsilon_disagreement: 0.000207
+[PASS] partial eta^2: tct x target_number (Sec. 5.1)
+         reported: 0.962
+         recomputed: 0.9616
+         delta: -0.00044
+[PASS] partial eta^2: tct x technique (Sec. 5.1)
+         reported: 0.034
+         recomputed: 0.0342
+         delta: 0.00023
+[PASS] partial eta^2: tct x interaction (Sec. 5.1)
+         reported: 0.03
+         recomputed: 0.03
+         delta: 4e-05
+[PASS] partial eta^2: tct_error_free x target_number (Sec. 5.1)
+         reported: 0.963
+         recomputed: 0.9628
+         delta: -0.00024
+[PASS] partial eta^2: tct_error_free x technique (Sec. 5.1)
+         reported: 0.042
+         recomputed: 0.0421
+         delta: 0.00015
+[PASS] partial eta^2: tct_error_free x interaction (Sec. 5.1)
+         reported: 0.028
+         recomputed: 0.0283
+         delta: 0.00035
+[PASS] partial eta^2: accidental_ratio x technique (Sec. 5.2)
+         reported: 0.248
+         recomputed: 0.2477
+         delta: -0.00027
+[PASS] partial eta^2: accidental_ratio x target_number (Sec. 5.2)
+         reported: 0.098
+         recomputed: 0.098
+         delta: -2e-05
+[PASS] partial eta^2: accidental_ratio x interaction (Sec. 5.2)
+         reported: 0.026
+         recomputed: 0.0255
+         delta: -0.00046
+[PASS] partial eta^2: error_rate x technique (Sec. 5.3)
+         reported: 0.398
+         recomputed: 0.3981
+         delta: 5e-05
+[PASS] partial eta^2: error_rate x target_number (Sec. 5.3)
+         reported: 0.056
+         recomputed: 0.0557
+         delta: -0.00032
+[PASS] partial eta^2: error_rate x interaction (Sec. 5.3)
+         reported: 0.064
+         recomputed: 0.0644
+         delta: 0.0004
+[PASS] partial eta^2: inverse_efficiency x technique (Sec. 5.4)
+         reported: 0.131
+         recomputed: 0.1312
+         delta: 0.00019
+[PASS] partial eta^2: inverse_efficiency x target_number (Sec. 5.4)
+         reported: 0.904
+         recomputed: 0.9044
+         delta: 0.00045
+[PASS] partial eta^2: inverse_efficiency x interaction (Sec. 5.4)
+         reported: 0.106
+         recomputed: 0.1055
+         delta: -0.00045
+[PASS] partial eta^2: hand_movement x technique (Sec. 5.5)
+         reported: 0.816
+         recomputed: 0.8161
+         delta: 9e-05
+[PASS] partial eta^2: hand_movement x target_number (Sec. 5.5)
+         reported: 0.9
+         recomputed: 0.9003
+         delta: 0.00031
+[PASS] partial eta^2: hand_movement x interaction (Sec. 5.5)
+         reported: 0.775
+         recomputed: 0.7749
+         delta: -7e-05
+[PASS] partial eta^2: hand_rotation x technique (Sec. 5.6)
+         reported: 0.843
+         recomputed: 0.8429
+         delta: -6e-05
+[PASS] partial eta^2: hand_rotation x target_number (Sec. 5.6)
+         reported: 0.88
+         recomputed: 0.8796
+         delta: -0.00037
+[PASS] partial eta^2: hand_rotation x interaction (Sec. 5.6)
+         reported: 0.796
+         recomputed: 0.7963
+         delta: 0.0003
+[PASS] p-value: tct x target_number (Sec. 5.1)
+         reported: p <.001
+         recomputed: 8.509e-37
+         F: 725.511
+         df: [1.747, 50.673]
+[PASS] p-value: tct x technique (Sec. 5.1)
+         reported: p =.379
+         recomputed: 3.796e-01
+         F: 1.028
+         df: [2.705, 78.457]
+[PASS] p-value: tct x interaction (Sec. 5.1)
+         reported: p =.488
+         recomputed: 4.882e-01
+         F: 0.898
+         df: [5.274, 152.945]
+[PASS] p-value: tct_error_free x target_number (Sec. 5.1)
+         reported: p <.001
+         recomputed: 1.905e-35
+         F: 749.745
+         df: [1.662, 48.192]
+[PASS] p-value: tct_error_free x technique (Sec. 5.1)
+         reported: p =.288
+         recomputed: 2.882e-01
+         F: 1.276
+         df: [2.754, 79.873]
+[PASS] p-value: tct_error_free x interaction (Sec. 5.1)
+         reported: p =.516
+         recomputed: 5.154e-01
+         F: 0.846
+         df: [4.794, 139.036]
+[PASS] p-value: accidental_ratio x technique (Sec. 5.2)
+         reported: p <.001
+         recomputed: 1.143e-05
+         F: 9.55
+         df: [3.126, 90.641]
+[PASS] p-value: accidental_ratio x target_number (Sec. 5.2)
+         reported: p =.058
+         recomputed: 5.803e-02
+         F: 3.15
+         df: [1.74, 50.469]
+[PASS] p-value: accidental_ratio x interaction (Sec. 5.2)
+         reported: p =.580
+         recomputed: 5.796e-01
+         F: 0.76
+         df: [4.98, 144.427]
+[PASS] p-value: error_rate x technique (Sec. 5.3)
+         reported: p <.001
+         recomputed: 1.210e-07
+         F: 19.177
+         df: [2.208, 64.023]
+[PASS] p-value: error_rate x target_number (Sec. 5.3)
+         reported: p =.194
+         recomputed: 1.941e-01
+         F: 1.71
+         df: [1.756, 50.912]
+[PASS] p-value: error_rate x interaction (Sec. 5.3)
+         reported: p =.116
+         recomputed: 1.158e-01
+         F: 1.996
+         df: [3.211, 93.112]
+[FLAG] p-value: inverse_efficiency x technique (Sec. 5.4)
+         reported: p <.001
+         recomputed: 9.379e-03
+         F: 4.379
+         df: [2.606, 75.57]
+[FLAG] p-value: inverse_efficiency x target_number (Sec. 5.4)
+         reported: p =.009
+         recomputed: 3.697e-27
+         F: 274.505
+         df: [1.775, 51.469]
+[PASS] p-value: inverse_efficiency x interaction (Sec. 5.4)
+         reported: p =.006
+         recomputed: 6.256e-03
+         F: 3.422
+         df: [4.916, 142.551]
+[PASS] p-value: hand_movement x technique (Sec. 5.5)
+         reported: p <.001
+         recomputed: 1.556e-15
+         F: 128.688
+         df: [1.339, 38.827]
+[PASS] p-value: hand_movement x target_number (Sec. 5.5)
+         reported: p <.001
+         recomputed: 9.688e-20
+         F: 261.889
+         df: [1.268, 36.78]
+[PASS] p-value: hand_movement x interaction (Sec. 5.5)
+         reported: p <.001
+         recomputed: 5.032e-20
+         F: 99.846
+         df: [2.06, 59.745]
+[PASS] p-value: hand_rotation x technique (Sec. 5.6)
+         reported: p <.001
+         recomputed: 5.213e-17
+         F: 155.639
+         df: [1.352, 39.199]
+[PASS] p-value: hand_rotation x target_number (Sec. 5.6)
+         reported: p <.001
+         recomputed: 6.205e-20
+         F: 211.932
+         df: [1.404, 40.714]
+[PASS] p-value: hand_rotation x interaction (Sec. 5.6)
+         reported: p <.001
+         recomputed: 1.436e-19
+         F: 113.369
+         df: [1.87, 54.234]
+[PASS] reported 28385 subselections vs design + reported accidental ratios
+         minimum_if_no_accidents: 27000
+         mean_accidental_subselection_ratio_pct: 4.767
+         predicted_total: 28351.5
+         reported_total: 28385
+         relative_error: 0.12%
+         note: 27000 is the floor: 30 participants x 5 techniques x 15 reps x (2+4+6) targets, assuming every target subselected once
+[PASS] 225 trials per participant = 5 x 3 x 15
+         computed: 225
+         reported: 225
+[PASS] 0.44% incomplete-trial exclusion matches 30/6750
+         total_trials: 6750
+         excluded: 30
+         recomputed_pct: 0.4444
+         reported_pct: 0.44
+[FLAG] 6.5% error-free exclusion matches 445 trials
+         445/6750: 6.593
+         445/6720: 6.622
+         reported_pct: 6.5
+         note: both readings round to 6.6%, not 6.5%
+[FLAG] 'two training trials before each block, consisting of 45 trials' is arithmetically consistent
+         computed_from_2_per_block: 10
+         reported: 45
+         note: Sec. 4.1.2 says 'two training trials before each block, consisting of 45 trials'; 2 x 5 = 10, not 45, so 'trial' must mean two training *phases* of variable length - Sec. 4.2 reports 10.77 multi-selections per phase, i.e. about 108 in total
+[PASS] IE = TCT / success rate implies a valid success rate at each target count
+         2: {'tct_ms': 4381.942, 'ie_ms': 4795.791, 'implied_success_rate_pct': 91.37}
+         4: {'tct_ms': 6691.875, 'ie_ms': 7556.147, 'implied_success_rate_pct': 88.56}
+         6: {'tct_ms': 9029.705, 'ie_ms': 10495.514, 'implied_success_rate_pct': 86.03}
+[PASS] implied success rate falls as targets increase
+         implied: {2: 91.37, 4: 88.56, 6: 86.03}
+[PASS] metrics.inverse_efficiency_ms round-trips the reported 6-target IE
+         recomputed: 10496.0
+         reported: 10495.514
+[PASS] Sec. 5.5 hand-movement ordering matches its own means
+         from_means: ['SemiSwipe', 'SemiTilt', 'FullDH', 'SemiNDH', 'SemiDwell']
+         stated_in_text: ['SemiSwipe', 'SemiTilt', 'FullDH', 'SemiNDH', 'SemiDwell']
+[PASS] Sec. 5.6 hand-rotation ordering matches its own means
+         from_means: ['SemiTilt', 'SemiSwipe', 'FullDH', 'SemiNDH', 'SemiDwell']
+         stated_in_text: ['SemiTilt', 'SemiSwipe', 'FullDH', 'SemiNDH', 'SemiDwell']
+[PASS] Sec. 5.3 body text ordering matches its own error-rate means
+         means_pct: {'FullDH': 1.207, 'SemiNDH': 1.854, 'SemiDwell': 8.612, 'SemiSwipe': 2.767, 'SemiTilt': 11.648}
+[FLAG] Fig. 10 caption ('SemiDwell and SemiSwipe higher than other techniques') agrees with the Sec. 5.3 body text
+         means_pct: {'FullDH': 1.207, 'SemiNDH': 1.854, 'SemiDwell': 8.612, 'SemiSwipe': 2.767, 'SemiTilt': 11.648}
+         body_sec_5_3: SemiSwipe showed a significantly LOWER error rate than SemiDwell and SemiTilt, but a higher error rate than FullDH
+         caption_fig_10: SemiDwell and SemiSwipe showed significantly HIGHER error rates than other techniques, but not between them
+         note: the means make SemiTilt the highest error rate at 11.648%, so the caption's pairing of SemiDwell with SemiSwipe contradicts both the body text and the printed means; the caption most likely meant SemiDwell and SemiTilt
+[PASS] SemiTilt: 3x gain on a 30 deg hand rotation sweeps the indicator 90 deg
+         gain: 3.0
+         hand_threshold_deg: 30.0
+         indicator_travel_deg: 90.0
+         paper_sec_6_2: the threshold of 30 deg was employed instead of 90 deg
+[PASS] pinch bands are ordered and non-overlapping
+         full_<: 0.02
+         semi: [0.02, 0.07]
+         release_>=: 0.1
+         dead_band_cm: [7.000000000000001, 10.0]
+[PASS] SUS minimum-usability criterion 4.05 on a 0-6 scale equals the conventional 68/100
+         reported_criterion: 4.05
+         as_percent_of_scale: 67.5
+         conventional_sus_threshold: 68
+[PASS] six-item SUS scoring reverses negatives against 6
+         example_positive: [5, 5, 4]
+         example_negative: [1, 1, 2]
+         score: {'sum': 28, 'mean': 4.666666666666667, 'n_items': 6}
+[PASS] stated angular window at 13.5 m converts to a metric window
+         window_width_m: 15.003
+         window_height_m: 6.001
+         lattice_cols: 16
+         lattice_rows: 7
+         lattice_cells: 112
+         objects_placed: 40
+         cells_unused: 72
+         object_angular_diameter_deg: 1.698
+         collider_angular_diameter_deg: 5.09
+         cell_pitch_deg: 4.242
+         collider_diameter_m: 1.2
+         colliders_overlap_orthogonal_neighbour: True
+         colliders_overlap_diagonal_neighbour: False
+[NOTE] the 1 m lattice inside the stated window holds far more than 40 cells
+         lattice: 16 x 7 = 112
+         objects_stated: 40
+         note: Sec. 4.1.2 gives 40 objects at 1 m spacing inside a 58.12 x 25.06 deg window at 13.5 m, i.e. 15.0 x 6.0 m. Rows and columns are never stated, so a reimplementation must guess whether the 40 objects fill a smaller grid or sparsely occupy this one
+[NOTE] 0.6 m gaze colliders overlap on a 1 m lattice
+         collider_diameter_m: 1.2
+         cell_pitch_m: 1.0
+         overlaps_diagonal_neighbour_too: False
+         object_angular_diameter_deg: 1.698
+         collider_angular_diameter_deg: 5.09
+         note: a single gaze ray can therefore pierce several colliders and the paper states no tie-break rule
+[PASS] the generated schedule reproduces 225 trials per participant
+         n_techniques: 5
+         williams_sequences: 10
+         cyclic_sequences: 5
+         ordered_pairs_covered: 20
+         ordered_pairs_possible: 20
+         carryover_counts: [2]
+         carryover_balanced: True
+         participants: 30
+         participants_per_sequence: 3.0
+         trials_per_participant: 225
+         trials_stated_by_paper: 225
+[NOTE] a balanced (Williams) square over 5 techniques needs 10 sequences, not 5
+         williams_sequences: 10
+         cyclic_sequences: 5
+         carryover_balanced: True
+         participants_per_sequence: 3.0
+         note: Sec. 4.1.2 says 'Balanced Latin square' without saying which; 30 participants divides evenly by both 5 and 10
+[PASS] ranking counts do not exceed the participant count
+         SemiDwell_first: 9
+         SemiSwipe_first: 8
+         SemiDwell_last: 10
+         FullDH_second: 11
+         SemiNDH_fourth: 11
+[PASS] SemiDwell is simultaneously most and least preferred, consistent with the polarisation Sec. 5.8 claims
+         ranked_first: 9
+         ranked_last: 10
+         sum: 19
+         participants: 30
+------------------------------------------------------------------------------
+82 checks consistent, 5 flagged, 87 total
+  FLAGGED: p-value: inverse_efficiency x technique (Sec. 5.4)
+  FLAGGED: p-value: inverse_efficiency x target_number (Sec. 5.4)
+  FLAGGED: 6.5% error-free exclusion matches 445 trials
+  FLAGGED: 'two training trials before each block, consisting of 45 trials' is arithmetically consistent
+  FLAGGED: Fig. 10 caption ('SemiDwell and SemiSwipe higher than other techniques') agrees with the Sec. 5.3 body text
+wrote results/audit.json
+
+=== 3/5  sensitivity of the inner loop to the unstated decisions =======
+==============================================================================
+SENSITIVITY OF THE INNER LOOP TO THE PAPER'S UNSTATED DECISIONS
+Synthetic input, the paper's stated geometry. Mechanism only.
+==============================================================================
+
+### gaze collider size
+  parameter: COLLIDER_SCALE (stated: 3x, Sec. 4.1.3)
+  question: how often the unstated tie-break is invoked at all
+    {"collider_scale": 1.0, "collider_radius_m": 0.2, "rays_hitting_something_pct": 4.83, "of_those_ambiguous_pct": 0.0}
+    {"collider_scale": 1.5, "collider_radius_m": 0.3, "rays_hitting_something_pct": 10.8, "of_those_ambiguous_pct": 0.0}
+    {"collider_scale": 2.0, "collider_radius_m": 0.4, "rays_hitting_something_pct": 18.81, "of_those_ambiguous_pct": 0.0}
+    {"collider_scale": 2.5, "collider_radius_m": 0.5, "rays_hitting_something_pct": 29.7, "of_those_ambiguous_pct": 0.54}
+    {"collider_scale": 3.0, "collider_radius_m": 0.6, "rays_hitting_something_pct": 40.42, "of_those_ambiguous_pct": 7.43}
+    {"collider_scale": 3.5, "collider_radius_m": 0.7, "rays_hitting_something_pct": 50.97, "of_those_ambiguous_pct": 16.2}
+    {"collider_scale": 4.0, "collider_radius_m": 0.8, "rays_hitting_something_pct": 60.98, "of_those_ambiguous_pct": 25.73}
+
+### gaze tie-break rule
+  parameter: GAZE_TIE_BREAK (ASSUMED; the paper states no rule)
+  question: does the choice of rule change which object is subselected
+  rays_tested: 20000
+  ambiguous_rays: 614
+  ambiguous_pct_of_all_rays: 3.07
+  min_angle_vs_scene_order_disagree_pct: 47.88
+  min_angle_vs_nearest_disagree_pct: 50.98
+
+### swipe activation distance
+  parameter: SWIPE_TRAVEL_M (ASSUMED 0.10 m; Sec. 3.3.2 gives no distance)
+  question: how many objects one leftward arm excursion can subselect
+  leftward_budget_m: 0.6
+    {"swipe_travel_m": 0.02, "objects_grouped_within_0.60m_budget": 8, "predicted_floor_budget_over_travel": 30}
+    {"swipe_travel_m": 0.04, "objects_grouped_within_0.60m_budget": 8, "predicted_floor_budget_over_travel": 15}
+    {"swipe_travel_m": 0.06, "objects_grouped_within_0.60m_budget": 8, "predicted_floor_budget_over_travel": 10}
+    {"swipe_travel_m": 0.08, "objects_grouped_within_0.60m_budget": 7, "predicted_floor_budget_over_travel": 7}
+    {"swipe_travel_m": 0.1, "objects_grouped_within_0.60m_budget": 5, "predicted_floor_budget_over_travel": 5}
+    {"swipe_travel_m": 0.15, "objects_grouped_within_0.60m_budget": 3, "predicted_floor_budget_over_travel": 4}
+    {"swipe_travel_m": 0.2, "objects_grouped_within_0.60m_budget": 2, "predicted_floor_budget_over_travel": 2}
+    {"swipe_travel_m": 0.3, "objects_grouped_within_0.60m_budget": 1, "predicted_floor_budget_over_travel": 2}
+  note: Sec. 3.3.2 raises exactly this problem - 'since hands can only move a certain distance, a return action is needed' - without giving the distance that sets the limit
+
+### dwell re-arm rule
+  parameter: DWELL_REARM (ASSUMED on_collider_exit; Sec. 3.3.1 is silent)
+  question: whether a lingering gaze can toggle an object back off
+    {"stare_ms": 500, "toggles_with_exit_rearm": 0, "toggles_if_timer_just_restarts": 1, "final_state_differs": true}
+    {"stare_ms": 1000, "toggles_with_exit_rearm": 1, "toggles_if_timer_just_restarts": 2, "final_state_differs": true}
+    {"stare_ms": 2000, "toggles_with_exit_rearm": 1, "toggles_if_timer_just_restarts": 4, "final_state_differs": true}
+    {"stare_ms": 3000, "toggles_with_exit_rearm": 1, "toggles_if_timer_just_restarts": 6, "final_state_differs": true}
+
+### tilt threshold
+  parameter: TILT_THRESHOLD_DEG (stated 30 deg, Sec. 3.3.3) with gain 3x
+  question: the stated threshold is recoverable; the sweep shows the consequence of getting it wrong
+    {"hand_threshold_deg": 10.0, "indicator_sweep_deg": 30.0, "toggles_in_a_79deg_roll": 1}
+    {"hand_threshold_deg": 20.0, "indicator_sweep_deg": 60.0, "toggles_in_a_79deg_roll": 1}
+    {"hand_threshold_deg": 30.0, "indicator_sweep_deg": 90.0, "toggles_in_a_79deg_roll": 1}
+    {"hand_threshold_deg": 45.0, "indicator_sweep_deg": 135.0, "toggles_in_a_79deg_roll": 1}
+    {"hand_threshold_deg": 60.0, "indicator_sweep_deg": 180.0, "toggles_in_a_79deg_roll": 1}
+    {"hand_threshold_deg": 90.0, "indicator_sweep_deg": 270.0, "toggles_in_a_79deg_roll": 0}
+
+### full-pinch contact threshold
+  parameter: FULL_PINCH_M (ASSUMED 0.02 m; Fig. 3 says only 'fingertips touching')
+  question: when the quasi-mode collapses into the terminating full pinch
+  aperture_trace: 12 cm closing to 1.5 cm over 400 ms, then held
+  upper_bound_forced_by_paper: 2 cm - any larger value would overlap the stated 2-7 cm semi-pinch band (Fig. 3)
+    {"full_pinch_threshold_m": 0.005, "grouped_before_trial_end": [0], "trial_end_ms": null}
+    {"full_pinch_threshold_m": 0.01, "grouped_before_trial_end": [0], "trial_end_ms": null}
+    {"full_pinch_threshold_m": 0.015, "grouped_before_trial_end": [0], "trial_end_ms": null}
+    {"full_pinch_threshold_m": 0.02, "grouped_before_trial_end": [], "trial_end_ms": 640}
+
+wrote results/sensitivity.json
+
+=== 4/5  recovering unstated parameters from the reported means ========
+==============================================================================
+RECOVERING UNSTATED PARAMETERS FROM THE PAPER'S REPORTED MEANS
+==============================================================================
+{
+  "assumptions": {
+    "mean_targets_per_trial": 4.0,
+    "floor_technique": "SemiDwell (Sec. 3.3.1 - requires no hand movement)",
+    "strokes_per_subselection": "unstated; 1 and 2 both reported",
+    "caveat": "estimated from published aggregate means, not from data; the authors released no dataset"
+  },
+  "swipe_activation_distance": {
+    "technique": "SemiSwipe",
+    "metric": "hand_movement_m",
+    "reported_mean": 1.47,
+    "floor_technique": "SemiDwell",
+    "floor_mean": 0.143,
+    "motion_attributable_to_the_trigger": 1.327,
+    "mean_subselections_per_trial": 4.1,
+    "estimates": {
+      "1_stroke(s)_per_subselection": {
+        "amplitude_per_stroke": 0.3237
+      },
+      "2_stroke(s)_per_subselection": {
+        "amplitude_per_stroke": 0.1618
+      }
+    },
+    "threshold_recovered": "SWIPE_TRAVEL_M (never stated)"
+  },
+  "tilt_activation_angle_estimator_validation": {
+    "technique": "SemiTilt",
+    "metric": "hand_rotation_deg",
+    "reported_mean": 687.451,
+    "floor_technique": "SemiDwell",
+    "floor_mean": 23.167,
+    "motion_attributable_to_the_trigger": 664.284,
+    "mean_subselections_per_trial": 4.14,
+    "estimates": {
+      "1_stroke(s)_per_subselection": {
+        "amplitude_per_stroke": 160.4578,
+        "stated_by_paper": 30.0,
+        "observed_over_stated": 5.349
+      },
+      "2_stroke(s)_per_subselection": {
+        "amplitude_per_stroke": 80.2289,
+        "stated_by_paper": 30.0,
+        "observed_over_stated": 2.674
+      }
+    },
+    "threshold_recovered": "TILT_THRESHOLD_DEG (stated: 30 deg)"
+  },
+  "overshoot_check": {
+    "paper_claim_sec_8": "participants tended to swipe more than the activation threshold; SemiTilt had a similar but more critical issue",
+    "tilt_overshoot_factor_2_strokes": 2.674,
+    "tilt_overshoot_factor_1_stroke": 5.349,
+    "overshoot_confirmed_by_the_reported_means": true
+  },
+  "swipe_distance_best_estimate_m": {
+    "assuming_the_same_overshoot_as_tilt_(2.674x)": 0.0605
+  },
+  "value_used_in_this_repo": 0.1
+}
+
+The estimator, scored on the one threshold the paper DOES state (tilt, 30 deg), overshoots by 2.674x with a return stroke and 5.349x without.
+Applied to SemiSwipe it puts the unstated activation distance at 0.162 m raw, or 0.060 m after discounting the same overshoot.
+This repository uses 0.1 m, which sits inside that range.
+wrote results/recovered_params.json
+
+=== 5/5  analysis pipeline on synthetic data of the paper's shape ======
+SYNTHETIC DATA - not the paper's data, not a simulation of the study.
+mode=null  rows=6750  participants=30
+trials per participant=225 (paper states 225)
+no effects planted: the correct analysis result is null everywhere
+wrote results/synthetic_null.csv
+wrote results/synthetic_questionnaire.csv (1200 rows, uniform random scores)
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+{
+  "input": "/workspace/repro/results/synthetic_null.csv",
+  "exclusions": {
+    "trials_in": 6750,
+    "trials_excluded_incomplete": 2,
+    "percent_excluded_incomplete": 0.03,
+    "rule": "missed fraction > 0.50",
+    "trials_excluded_for_errorfree_tct": 2231,
+    "percent_excluded_for_errorfree_tct": 33.062
+  },
+  "n_participants": 30,
+  "n_cells": 450,
+  "design": {
+    "techniques": [
+      "FullDH",
+      "SemiDwell",
+      "SemiNDH",
+      "SemiSwipe",
+      "SemiTilt"
+    ],
+    "target_numbers": [
+      2,
+      4,
+      6
+    ]
+  },
+  "dvs_analysed": [
+    "tct_ms",
+    "accidental_ratio",
+    "error_rate",
+    "inverse_efficiency_ms",
+    "hand_movement_m",
+    "hand_rotation_deg"
+  ],
+  "outputs": [
+    "cell_means.csv",
+    "posthoc.csv",
+    "questionnaire_friedman.csv",
+    "questionnaire_posthoc.csv",
+    "rm_anova.csv",
+    "rm_anova_tct_error_free.csv",
+    "sphericity.csv",
+    "summary.json"
+  ],
+  "questionnaire_measures": [
+    "effort",
+    "frustration",
+    "mental",
+    "performance",
+    "physical",
+    "satisfaction",
+    "sus",
+    "temporal"
+  ]
+}
+
+--- RM ANOVA (technique x target number) ---
+                   dv                    Source         F      ng2      eps
+               tct_ms                 technique  0.402063 0.000101 0.981019
+               tct_ms             target_number  1.823525 0.000280 0.924258
+               tct_ms technique * target_number  1.075062 0.000503 0.602500
+     accidental_ratio                 technique  1.324381 0.012722 0.835852
+     accidental_ratio             target_number  1.820889 0.008114 0.991803
+     accidental_ratio technique * target_number  0.441012 0.007290 0.693025
+           error_rate                 technique  0.182147 0.001947 0.940039
+           error_rate             target_number 78.173630 0.275038 0.744721
+           error_rate technique * target_number  0.951958 0.016160 0.526424
+inverse_efficiency_ms                 technique  1.321957 0.008431 0.759565
+inverse_efficiency_ms             target_number 20.485786 0.057273 0.964398
+inverse_efficiency_ms technique * target_number  0.788053 0.008178 0.507417
+      hand_movement_m                 technique  0.846210 0.007692 0.918827
+      hand_movement_m             target_number  2.466132 0.014614 0.947161
+      hand_movement_m technique * target_number  1.348587 0.023274 0.726293
+    hand_rotation_deg                 technique  0.208546 0.001952 0.871867
+    hand_rotation_deg             target_number  0.340951 0.001713 0.999402
+    hand_rotation_deg technique * target_number  0.661253 0.011841 0.660971
+
+SYNTHETIC DATA - not the paper's data, not a simulation of the study.
+mode=planted  rows=6750  participants=30
+trials per participant=225 (paper states 225)
+planted per-target cost: 700.0 ms
+planted technique offsets: {'FullDH': 0.0, 'SemiNDH': 250.0, 'SemiDwell': 500.0, 'SemiSwipe': 750.0, 'SemiTilt': 1000.0}
+wrote results/synthetic_planted.csv
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pingouin/distribution.py:514: UserWarning: Epsilon values might be innaccurate in two-way repeated measures design where each  factor has more than 2 levels. Please  double-check your results.
+  warnings.warn(
+{
+  "input": "/workspace/repro/results/synthetic_planted.csv",
+  "exclusions": {
+    "trials_in": 6750,
+    "trials_excluded_incomplete": 2,
+    "percent_excluded_incomplete": 0.03,
+    "rule": "missed fraction > 0.50",
+    "trials_excluded_for_errorfree_tct": 2231,
+    "percent_excluded_for_errorfree_tct": 33.062
+  },
+  "n_participants": 30,
+  "n_cells": 450,
+  "design": {
+    "techniques": [
+      "FullDH",
+      "SemiDwell",
+      "SemiNDH",
+      "SemiSwipe",
+      "SemiTilt"
+    ],
+    "target_numbers": [
+      2,
+      4,
+      6
+    ]
+  },
+  "dvs_analysed": [
+    "tct_ms",
+    "accidental_ratio",
+    "error_rate",
+    "inverse_efficiency_ms",
+    "hand_movement_m",
+    "hand_rotation_deg"
+  ],
+  "outputs": [
+    "cell_means.csv",
+    "posthoc.csv",
+    "rm_anova.csv",
+    "rm_anova_tct_error_free.csv",
+    "sphericity.csv",
+    "summary.json"
+  ]
+}
+
+--- RM ANOVA (technique x target number) ---
+                   dv                    Source            F      ng2      eps
+               tct_ms                 technique   599.409124 0.130914 0.981019
+               tct_ms             target_number 10083.132204 0.607712 0.924258
+               tct_ms technique * target_number     1.075062 0.000503 0.602500
+     accidental_ratio                 technique     1.324381 0.012722 0.835852
+     accidental_ratio             target_number     1.820889 0.008114 0.991803
+     accidental_ratio technique * target_number     0.441012 0.007290 0.693025
+           error_rate                 technique     0.182147 0.001947 0.940039
+           error_rate             target_number    78.173630 0.275038 0.744721
+           error_rate technique * target_number     0.951958 0.016160 0.526424
+inverse_efficiency_ms                 technique     7.752336 0.062152 0.737340
+inverse_efficiency_ms             target_number   162.245925 0.391514 0.902134
+inverse_efficiency_ms technique * target_number     0.788549 0.011381 0.445619
+      hand_movement_m                 technique     0.846210 0.007692 0.918827
+      hand_movement_m             target_number     2.466132 0.014614 0.947161
+      hand_movement_m technique * target_number     1.348587 0.023274 0.726293
+    hand_rotation_deg                 technique     0.208546 0.001952 0.871867
+    hand_rotation_deg             target_number     0.340951 0.001713 0.999402
+    hand_rotation_deg technique * target_number     0.661253 0.011841 0.660971
+
+### done

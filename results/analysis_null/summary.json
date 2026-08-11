@@ -1,0 +1,55 @@
+{
+  "input": "/workspace/repro/results/synthetic_null.csv",
+  "exclusions": {
+    "trials_in": 6750,
+    "trials_excluded_incomplete": 2,
+    "percent_excluded_incomplete": 0.03,
+    "rule": "missed fraction > 0.50",
+    "trials_excluded_for_errorfree_tct": 2231,
+    "percent_excluded_for_errorfree_tct": 33.062
+  },
+  "n_participants": 30,
+  "n_cells": 450,
+  "design": {
+    "techniques": [
+      "FullDH",
+      "SemiDwell",
+      "SemiNDH",
+      "SemiSwipe",
+      "SemiTilt"
+    ],
+    "target_numbers": [
+      2,
+      4,
+      6
+    ]
+  },
+  "dvs_analysed": [
+    "tct_ms",
+    "accidental_ratio",
+    "error_rate",
+    "inverse_efficiency_ms",
+    "hand_movement_m",
+    "hand_rotation_deg"
+  ],
+  "outputs": [
+    "cell_means.csv",
+    "posthoc.csv",
+    "questionnaire_friedman.csv",
+    "questionnaire_posthoc.csv",
+    "rm_anova.csv",
+    "rm_anova_tct_error_free.csv",
+    "sphericity.csv",
+    "summary.json"
+  ],
+  "questionnaire_measures": [
+    "effort",
+    "frustration",
+    "mental",
+    "performance",
+    "physical",
+    "satisfaction",
+    "sus",
+    "temporal"
+  ]
+}

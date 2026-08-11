@@ -1,0 +1,1099 @@
+{
+  "n_checks": 87,
+  "n_consistent": 82,
+  "n_flagged": 5,
+  "checks": [
+    {
+      "check": "df/epsilon consistency: tct x target_number (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.8735,
+        "epsilon_from_df2": 0.873672,
+        "difference": 0.000172,
+        "epsilon_lower_bound": 0.5,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: tct x technique (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.67625,
+        "epsilon_from_df2": 0.676353,
+        "difference": 0.000103,
+        "epsilon_lower_bound": 0.25,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: tct x interaction (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.65925,
+        "epsilon_from_df2": 0.659246,
+        "difference": 4e-06,
+        "epsilon_lower_bound": 0.125,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: tct_error_free x target_number (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.831,
+        "epsilon_from_df2": 0.830897,
+        "difference": 0.000103,
+        "epsilon_lower_bound": 0.5,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: tct_error_free x technique (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.6885,
+        "epsilon_from_df2": 0.68856,
+        "difference": 6e-05,
+        "epsilon_lower_bound": 0.25,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: tct_error_free x interaction (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.59925,
+        "epsilon_from_df2": 0.599293,
+        "difference": 4.3e-05,
+        "epsilon_lower_bound": 0.125,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: accidental_ratio x technique (Sec. 5.2)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.7815,
+        "epsilon_from_df2": 0.781388,
+        "difference": 0.000112,
+        "epsilon_lower_bound": 0.25,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: accidental_ratio x target_number (Sec. 5.2)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.87,
+        "epsilon_from_df2": 0.870155,
+        "difference": 0.000155,
+        "epsilon_lower_bound": 0.5,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: accidental_ratio x interaction (Sec. 5.2)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.6225,
+        "epsilon_from_df2": 0.62253,
+        "difference": 3e-05,
+        "epsilon_lower_bound": 0.125,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: error_rate x technique (Sec. 5.3)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.552,
+        "epsilon_from_df2": 0.551922,
+        "difference": 7.8e-05,
+        "epsilon_lower_bound": 0.25,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: error_rate x target_number (Sec. 5.3)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.878,
+        "epsilon_from_df2": 0.877793,
+        "difference": 0.000207,
+        "epsilon_lower_bound": 0.5,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: error_rate x interaction (Sec. 5.3)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.401375,
+        "epsilon_from_df2": 0.401345,
+        "difference": 3e-05,
+        "epsilon_lower_bound": 0.125,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: inverse_efficiency x technique (Sec. 5.4)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.6515,
+        "epsilon_from_df2": 0.651466,
+        "difference": 3.4e-05,
+        "epsilon_lower_bound": 0.25,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: inverse_efficiency x target_number (Sec. 5.4)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.8875,
+        "epsilon_from_df2": 0.887397,
+        "difference": 0.000103,
+        "epsilon_lower_bound": 0.5,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: inverse_efficiency x interaction (Sec. 5.4)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.6145,
+        "epsilon_from_df2": 0.614444,
+        "difference": 5.6e-05,
+        "epsilon_lower_bound": 0.125,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: hand_movement x technique (Sec. 5.5)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.33475,
+        "epsilon_from_df2": 0.334716,
+        "difference": 3.4e-05,
+        "epsilon_lower_bound": 0.25,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: hand_movement x target_number (Sec. 5.5)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.634,
+        "epsilon_from_df2": 0.634138,
+        "difference": 0.000138,
+        "epsilon_lower_bound": 0.5,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: hand_movement x interaction (Sec. 5.5)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.2575,
+        "epsilon_from_df2": 0.257522,
+        "difference": 2.2e-05,
+        "epsilon_lower_bound": 0.125,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: hand_rotation x technique (Sec. 5.6)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.338,
+        "epsilon_from_df2": 0.337922,
+        "difference": 7.8e-05,
+        "epsilon_lower_bound": 0.25,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: hand_rotation x target_number (Sec. 5.6)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.702,
+        "epsilon_from_df2": 0.701966,
+        "difference": 3.4e-05,
+        "epsilon_lower_bound": 0.5,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "df/epsilon consistency: hand_rotation x interaction (Sec. 5.6)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "epsilon_from_df1": 0.23375,
+        "epsilon_from_df2": 0.233767,
+        "difference": 1.7e-05,
+        "epsilon_lower_bound": 0.125,
+        "implied_N": 30
+      }
+    },
+    {
+      "check": "all 21 F tests imply the same N=30 design and one epsilon per test",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "max_epsilon_disagreement": 0.000207
+      }
+    },
+    {
+      "check": "partial eta^2: tct x target_number (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.962,
+        "recomputed": 0.9616,
+        "delta": -0.00044
+      }
+    },
+    {
+      "check": "partial eta^2: tct x technique (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.034,
+        "recomputed": 0.0342,
+        "delta": 0.00023
+      }
+    },
+    {
+      "check": "partial eta^2: tct x interaction (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.03,
+        "recomputed": 0.03,
+        "delta": 4e-05
+      }
+    },
+    {
+      "check": "partial eta^2: tct_error_free x target_number (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.963,
+        "recomputed": 0.9628,
+        "delta": -0.00024
+      }
+    },
+    {
+      "check": "partial eta^2: tct_error_free x technique (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.042,
+        "recomputed": 0.0421,
+        "delta": 0.00015
+      }
+    },
+    {
+      "check": "partial eta^2: tct_error_free x interaction (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.028,
+        "recomputed": 0.0283,
+        "delta": 0.00035
+      }
+    },
+    {
+      "check": "partial eta^2: accidental_ratio x technique (Sec. 5.2)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.248,
+        "recomputed": 0.2477,
+        "delta": -0.00027
+      }
+    },
+    {
+      "check": "partial eta^2: accidental_ratio x target_number (Sec. 5.2)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.098,
+        "recomputed": 0.098,
+        "delta": -2e-05
+      }
+    },
+    {
+      "check": "partial eta^2: accidental_ratio x interaction (Sec. 5.2)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.026,
+        "recomputed": 0.0255,
+        "delta": -0.00046
+      }
+    },
+    {
+      "check": "partial eta^2: error_rate x technique (Sec. 5.3)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.398,
+        "recomputed": 0.3981,
+        "delta": 5e-05
+      }
+    },
+    {
+      "check": "partial eta^2: error_rate x target_number (Sec. 5.3)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.056,
+        "recomputed": 0.0557,
+        "delta": -0.00032
+      }
+    },
+    {
+      "check": "partial eta^2: error_rate x interaction (Sec. 5.3)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.064,
+        "recomputed": 0.0644,
+        "delta": 0.0004
+      }
+    },
+    {
+      "check": "partial eta^2: inverse_efficiency x technique (Sec. 5.4)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.131,
+        "recomputed": 0.1312,
+        "delta": 0.00019
+      }
+    },
+    {
+      "check": "partial eta^2: inverse_efficiency x target_number (Sec. 5.4)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.904,
+        "recomputed": 0.9044,
+        "delta": 0.00045
+      }
+    },
+    {
+      "check": "partial eta^2: inverse_efficiency x interaction (Sec. 5.4)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.106,
+        "recomputed": 0.1055,
+        "delta": -0.00045
+      }
+    },
+    {
+      "check": "partial eta^2: hand_movement x technique (Sec. 5.5)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.816,
+        "recomputed": 0.8161,
+        "delta": 9e-05
+      }
+    },
+    {
+      "check": "partial eta^2: hand_movement x target_number (Sec. 5.5)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.9,
+        "recomputed": 0.9003,
+        "delta": 0.00031
+      }
+    },
+    {
+      "check": "partial eta^2: hand_movement x interaction (Sec. 5.5)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.775,
+        "recomputed": 0.7749,
+        "delta": -7e-05
+      }
+    },
+    {
+      "check": "partial eta^2: hand_rotation x technique (Sec. 5.6)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.843,
+        "recomputed": 0.8429,
+        "delta": -6e-05
+      }
+    },
+    {
+      "check": "partial eta^2: hand_rotation x target_number (Sec. 5.6)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.88,
+        "recomputed": 0.8796,
+        "delta": -0.00037
+      }
+    },
+    {
+      "check": "partial eta^2: hand_rotation x interaction (Sec. 5.6)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": 0.796,
+        "recomputed": 0.7963,
+        "delta": 0.0003
+      }
+    },
+    {
+      "check": "p-value: tct x target_number (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p <.001",
+        "recomputed": "8.509e-37",
+        "F": 725.511,
+        "df": [
+          1.747,
+          50.673
+        ]
+      }
+    },
+    {
+      "check": "p-value: tct x technique (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p =.379",
+        "recomputed": "3.796e-01",
+        "F": 1.028,
+        "df": [
+          2.705,
+          78.457
+        ]
+      }
+    },
+    {
+      "check": "p-value: tct x interaction (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p =.488",
+        "recomputed": "4.882e-01",
+        "F": 0.898,
+        "df": [
+          5.274,
+          152.945
+        ]
+      }
+    },
+    {
+      "check": "p-value: tct_error_free x target_number (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p <.001",
+        "recomputed": "1.905e-35",
+        "F": 749.745,
+        "df": [
+          1.662,
+          48.192
+        ]
+      }
+    },
+    {
+      "check": "p-value: tct_error_free x technique (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p =.288",
+        "recomputed": "2.882e-01",
+        "F": 1.276,
+        "df": [
+          2.754,
+          79.873
+        ]
+      }
+    },
+    {
+      "check": "p-value: tct_error_free x interaction (Sec. 5.1)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p =.516",
+        "recomputed": "5.154e-01",
+        "F": 0.846,
+        "df": [
+          4.794,
+          139.036
+        ]
+      }
+    },
+    {
+      "check": "p-value: accidental_ratio x technique (Sec. 5.2)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p <.001",
+        "recomputed": "1.143e-05",
+        "F": 9.55,
+        "df": [
+          3.126,
+          90.641
+        ]
+      }
+    },
+    {
+      "check": "p-value: accidental_ratio x target_number (Sec. 5.2)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p =.058",
+        "recomputed": "5.803e-02",
+        "F": 3.15,
+        "df": [
+          1.74,
+          50.469
+        ]
+      }
+    },
+    {
+      "check": "p-value: accidental_ratio x interaction (Sec. 5.2)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p =.580",
+        "recomputed": "5.796e-01",
+        "F": 0.76,
+        "df": [
+          4.98,
+          144.427
+        ]
+      }
+    },
+    {
+      "check": "p-value: error_rate x technique (Sec. 5.3)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p <.001",
+        "recomputed": "1.210e-07",
+        "F": 19.177,
+        "df": [
+          2.208,
+          64.023
+        ]
+      }
+    },
+    {
+      "check": "p-value: error_rate x target_number (Sec. 5.3)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p =.194",
+        "recomputed": "1.941e-01",
+        "F": 1.71,
+        "df": [
+          1.756,
+          50.912
+        ]
+      }
+    },
+    {
+      "check": "p-value: error_rate x interaction (Sec. 5.3)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p =.116",
+        "recomputed": "1.158e-01",
+        "F": 1.996,
+        "df": [
+          3.211,
+          93.112
+        ]
+      }
+    },
+    {
+      "check": "p-value: inverse_efficiency x technique (Sec. 5.4)",
+      "ok": false,
+      "kind": "mismatch",
+      "detail": {
+        "reported": "p <.001",
+        "recomputed": "9.379e-03",
+        "F": 4.379,
+        "df": [
+          2.606,
+          75.57
+        ]
+      }
+    },
+    {
+      "check": "p-value: inverse_efficiency x target_number (Sec. 5.4)",
+      "ok": false,
+      "kind": "mismatch",
+      "detail": {
+        "reported": "p =.009",
+        "recomputed": "3.697e-27",
+        "F": 274.505,
+        "df": [
+          1.775,
+          51.469
+        ]
+      }
+    },
+    {
+      "check": "p-value: inverse_efficiency x interaction (Sec. 5.4)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p =.006",
+        "recomputed": "6.256e-03",
+        "F": 3.422,
+        "df": [
+          4.916,
+          142.551
+        ]
+      }
+    },
+    {
+      "check": "p-value: hand_movement x technique (Sec. 5.5)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p <.001",
+        "recomputed": "1.556e-15",
+        "F": 128.688,
+        "df": [
+          1.339,
+          38.827
+        ]
+      }
+    },
+    {
+      "check": "p-value: hand_movement x target_number (Sec. 5.5)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p <.001",
+        "recomputed": "9.688e-20",
+        "F": 261.889,
+        "df": [
+          1.268,
+          36.78
+        ]
+      }
+    },
+    {
+      "check": "p-value: hand_movement x interaction (Sec. 5.5)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p <.001",
+        "recomputed": "5.032e-20",
+        "F": 99.846,
+        "df": [
+          2.06,
+          59.745
+        ]
+      }
+    },
+    {
+      "check": "p-value: hand_rotation x technique (Sec. 5.6)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p <.001",
+        "recomputed": "5.213e-17",
+        "F": 155.639,
+        "df": [
+          1.352,
+          39.199
+        ]
+      }
+    },
+    {
+      "check": "p-value: hand_rotation x target_number (Sec. 5.6)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p <.001",
+        "recomputed": "6.205e-20",
+        "F": 211.932,
+        "df": [
+          1.404,
+          40.714
+        ]
+      }
+    },
+    {
+      "check": "p-value: hand_rotation x interaction (Sec. 5.6)",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported": "p <.001",
+        "recomputed": "1.436e-19",
+        "F": 113.369,
+        "df": [
+          1.87,
+          54.234
+        ]
+      }
+    },
+    {
+      "check": "reported 28385 subselections vs design + reported accidental ratios",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "minimum_if_no_accidents": 27000,
+        "mean_accidental_subselection_ratio_pct": 4.767,
+        "predicted_total": 28351.5,
+        "reported_total": 28385,
+        "relative_error": "0.12%",
+        "note": "27000 is the floor: 30 participants x 5 techniques x 15 reps x (2+4+6) targets, assuming every target subselected once"
+      }
+    },
+    {
+      "check": "225 trials per participant = 5 x 3 x 15",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "computed": 225,
+        "reported": 225
+      }
+    },
+    {
+      "check": "0.44% incomplete-trial exclusion matches 30/6750",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "total_trials": 6750,
+        "excluded": 30,
+        "recomputed_pct": 0.4444,
+        "reported_pct": 0.44
+      }
+    },
+    {
+      "check": "6.5% error-free exclusion matches 445 trials",
+      "ok": false,
+      "kind": "mismatch",
+      "detail": {
+        "445/6750": 6.593,
+        "445/6720": 6.622,
+        "reported_pct": 6.5,
+        "note": "both readings round to 6.6%, not 6.5%"
+      }
+    },
+    {
+      "check": "'two training trials before each block, consisting of 45 trials' is arithmetically consistent",
+      "ok": false,
+      "kind": "mismatch",
+      "detail": {
+        "computed_from_2_per_block": 10,
+        "reported": 45,
+        "note": "Sec. 4.1.2 says 'two training trials before each block, consisting of 45 trials'; 2 x 5 = 10, not 45, so 'trial' must mean two training *phases* of variable length - Sec. 4.2 reports 10.77 multi-selections per phase, i.e. about 108 in total"
+      }
+    },
+    {
+      "check": "IE = TCT / success rate implies a valid success rate at each target count",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "2": {
+          "tct_ms": 4381.942,
+          "ie_ms": 4795.791,
+          "implied_success_rate_pct": 91.37
+        },
+        "4": {
+          "tct_ms": 6691.875,
+          "ie_ms": 7556.147,
+          "implied_success_rate_pct": 88.56
+        },
+        "6": {
+          "tct_ms": 9029.705,
+          "ie_ms": 10495.514,
+          "implied_success_rate_pct": 86.03
+        }
+      }
+    },
+    {
+      "check": "implied success rate falls as targets increase",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "implied": {
+          "2": 91.37,
+          "4": 88.56,
+          "6": 86.03
+        }
+      }
+    },
+    {
+      "check": "metrics.inverse_efficiency_ms round-trips the reported 6-target IE",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "recomputed": 10496.0,
+        "reported": 10495.514
+      }
+    },
+    {
+      "check": "Sec. 5.5 hand-movement ordering matches its own means",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "from_means": [
+          "SemiSwipe",
+          "SemiTilt",
+          "FullDH",
+          "SemiNDH",
+          "SemiDwell"
+        ],
+        "stated_in_text": [
+          "SemiSwipe",
+          "SemiTilt",
+          "FullDH",
+          "SemiNDH",
+          "SemiDwell"
+        ]
+      }
+    },
+    {
+      "check": "Sec. 5.6 hand-rotation ordering matches its own means",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "from_means": [
+          "SemiTilt",
+          "SemiSwipe",
+          "FullDH",
+          "SemiNDH",
+          "SemiDwell"
+        ],
+        "stated_in_text": [
+          "SemiTilt",
+          "SemiSwipe",
+          "FullDH",
+          "SemiNDH",
+          "SemiDwell"
+        ]
+      }
+    },
+    {
+      "check": "Sec. 5.3 body text ordering matches its own error-rate means",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "means_pct": {
+          "FullDH": 1.207,
+          "SemiNDH": 1.854,
+          "SemiDwell": 8.612,
+          "SemiSwipe": 2.767,
+          "SemiTilt": 11.648
+        }
+      }
+    },
+    {
+      "check": "Fig. 10 caption ('SemiDwell and SemiSwipe higher than other techniques') agrees with the Sec. 5.3 body text",
+      "ok": false,
+      "kind": "mismatch",
+      "detail": {
+        "means_pct": {
+          "FullDH": 1.207,
+          "SemiNDH": 1.854,
+          "SemiDwell": 8.612,
+          "SemiSwipe": 2.767,
+          "SemiTilt": 11.648
+        },
+        "body_sec_5_3": "SemiSwipe showed a significantly LOWER error rate than SemiDwell and SemiTilt, but a higher error rate than FullDH",
+        "caption_fig_10": "SemiDwell and SemiSwipe showed significantly HIGHER error rates than other techniques, but not between them",
+        "note": "the means make SemiTilt the highest error rate at 11.648%, so the caption's pairing of SemiDwell with SemiSwipe contradicts both the body text and the printed means; the caption most likely meant SemiDwell and SemiTilt"
+      }
+    },
+    {
+      "check": "SemiTilt: 3x gain on a 30 deg hand rotation sweeps the indicator 90 deg",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "gain": 3.0,
+        "hand_threshold_deg": 30.0,
+        "indicator_travel_deg": 90.0,
+        "paper_sec_6_2": "the threshold of 30 deg was employed instead of 90 deg"
+      }
+    },
+    {
+      "check": "pinch bands are ordered and non-overlapping",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "full_<": 0.02,
+        "semi": [
+          0.02,
+          0.07
+        ],
+        "release_>=": 0.1,
+        "dead_band_cm": [
+          7.000000000000001,
+          10.0
+        ]
+      }
+    },
+    {
+      "check": "SUS minimum-usability criterion 4.05 on a 0-6 scale equals the conventional 68/100",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "reported_criterion": 4.05,
+        "as_percent_of_scale": 67.5,
+        "conventional_sus_threshold": 68
+      }
+    },
+    {
+      "check": "six-item SUS scoring reverses negatives against 6",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "example_positive": [
+          5,
+          5,
+          4
+        ],
+        "example_negative": [
+          1,
+          1,
+          2
+        ],
+        "score": {
+          "sum": 28,
+          "mean": 4.666666666666667,
+          "n_items": 6
+        }
+      }
+    },
+    {
+      "check": "stated angular window at 13.5 m converts to a metric window",
+      "ok": true,
+      "kind": "derivation",
+      "detail": {
+        "window_width_m": 15.003,
+        "window_height_m": 6.001,
+        "lattice_cols": 16,
+        "lattice_rows": 7,
+        "lattice_cells": 112,
+        "objects_placed": 40,
+        "cells_unused": 72,
+        "object_angular_diameter_deg": 1.698,
+        "collider_angular_diameter_deg": 5.09,
+        "cell_pitch_deg": 4.242,
+        "collider_diameter_m": 1.2,
+        "colliders_overlap_orthogonal_neighbour": true,
+        "colliders_overlap_diagonal_neighbour": false
+      }
+    },
+    {
+      "check": "the 1 m lattice inside the stated window holds far more than 40 cells",
+      "ok": true,
+      "kind": "underspecified",
+      "detail": {
+        "lattice": "16 x 7 = 112",
+        "objects_stated": 40,
+        "note": "Sec. 4.1.2 gives 40 objects at 1 m spacing inside a 58.12 x 25.06 deg window at 13.5 m, i.e. 15.0 x 6.0 m. Rows and columns are never stated, so a reimplementation must guess whether the 40 objects fill a smaller grid or sparsely occupy this one"
+      }
+    },
+    {
+      "check": "0.6 m gaze colliders overlap on a 1 m lattice",
+      "ok": true,
+      "kind": "underspecified",
+      "detail": {
+        "collider_diameter_m": 1.2,
+        "cell_pitch_m": 1.0,
+        "overlaps_diagonal_neighbour_too": false,
+        "object_angular_diameter_deg": 1.698,
+        "collider_angular_diameter_deg": 5.09,
+        "note": "a single gaze ray can therefore pierce several colliders and the paper states no tie-break rule"
+      }
+    },
+    {
+      "check": "the generated schedule reproduces 225 trials per participant",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "n_techniques": 5,
+        "williams_sequences": 10,
+        "cyclic_sequences": 5,
+        "ordered_pairs_covered": 20,
+        "ordered_pairs_possible": 20,
+        "carryover_counts": [
+          2
+        ],
+        "carryover_balanced": true,
+        "participants": 30,
+        "participants_per_sequence": 3.0,
+        "trials_per_participant": 225,
+        "trials_stated_by_paper": 225
+      }
+    },
+    {
+      "check": "a balanced (Williams) square over 5 techniques needs 10 sequences, not 5",
+      "ok": true,
+      "kind": "underspecified",
+      "detail": {
+        "williams_sequences": 10,
+        "cyclic_sequences": 5,
+        "carryover_balanced": true,
+        "participants_per_sequence": 3.0,
+        "note": "Sec. 4.1.2 says 'Balanced Latin square' without saying which; 30 participants divides evenly by both 5 and 10"
+      }
+    },
+    {
+      "check": "ranking counts do not exceed the participant count",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "SemiDwell_first": 9,
+        "SemiSwipe_first": 8,
+        "SemiDwell_last": 10,
+        "FullDH_second": 11,
+        "SemiNDH_fourth": 11
+      }
+    },
+    {
+      "check": "SemiDwell is simultaneously most and least preferred, consistent with the polarisation Sec. 5.8 claims",
+      "ok": true,
+      "kind": "consistency",
+      "detail": {
+        "ranked_first": 9,
+        "ranked_last": 10,
+        "sum": 19,
+        "participants": 30
+      }
+    }
+  ]
+}

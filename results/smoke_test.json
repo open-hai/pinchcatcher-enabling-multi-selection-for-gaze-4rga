@@ -1,0 +1,242 @@
+{
+  "passed": 19,
+  "total": 19,
+  "tests": [
+    {
+      "test": "pinch state bands (Sec. 3.2, Fig. 3)",
+      "ok": true,
+      "detail": {
+        "bands_cm": {
+          "full": "<2",
+          "semi": "2-7",
+          "release": ">=10"
+        }
+      }
+    },
+    {
+      "test": "7-10 cm dead band holds the current state (Sec. 3.2)",
+      "ok": true,
+      "detail": {
+        "dead_band_cm": [
+          7.000000000000001,
+          10.0
+        ],
+        "purpose": "Sec. 3.2 - prevent false activation of the ungrouping function"
+      }
+    },
+    {
+      "test": "3x gaze collider overlaps neighbours (Sec. 4.1.3)",
+      "ok": true,
+      "detail": {
+        "ray_aimed_at": [
+          0.55,
+          0.0,
+          13.5
+        ],
+        "hits_with_visible_radius": [],
+        "hits_with_collider_radius": [
+          0,
+          1
+        ],
+        "chosen_by_min_angle": 1,
+        "chosen_by_scene_order": 0,
+        "overlap_lens_width_m": 0.2,
+        "consequence": "the unstated tie-break selects a different object for the same gaze ray whenever it falls in the overlap"
+      }
+    },
+    {
+      "test": "angular sizes of object and collider at 13.5 m",
+      "ok": true,
+      "detail": {
+        "visible_object_deg": 1.698,
+        "gaze_collider_deg": 5.09,
+        "ratio": 2.998
+      }
+    },
+    {
+      "test": "SemiDwell fires at 500 ms, not before (Sec. 3.3.1)",
+      "ok": true,
+      "detail": {
+        "threshold_ms": 500,
+        "at_590ms": [
+          0
+        ],
+        "at_390ms": []
+      }
+    },
+    {
+      "test": "SemiDwell is gated by the semi-pinch quasi-mode (Sec. 3.3)",
+      "ok": true,
+      "detail": {
+        "dh_distance_cm": 15,
+        "grouped": []
+      }
+    },
+    {
+      "test": "SemiDwell does not re-toggle on a held stare (ASSUMED)",
+      "ok": true,
+      "detail": {
+        "stare_ms": 2990,
+        "toggles": 1,
+        "assumption": "on_collider_exit"
+      }
+    },
+    {
+      "test": "SemiSwipe: leftward only, past the travel threshold (Sec. 3.3.2)",
+      "ok": true,
+      "detail": {
+        "travel_threshold_m_ASSUMED": 0.1,
+        "left_0.145m": [
+          0
+        ],
+        "right_0.145m": [],
+        "left_0.070m": [],
+        "caveat": "the paper never states the swipe distance; this threshold is the single most load-bearing assumption in SemiSwipe"
+      }
+    },
+    {
+      "test": "SemiTilt: 30 deg hand, 3x geared indicator (Sec. 3.3.3)",
+      "ok": true,
+      "detail": {
+        "hand_threshold_deg": 30.0,
+        "gain": 3.0,
+        "indicator_at_10deg_hand": 30.0,
+        "indicator_sweep_at_threshold": 90.0
+      }
+    },
+    {
+      "test": "SemiNDH: NDH pinch click while DH holds semi (Sec. 3.3.4)",
+      "ok": true,
+      "detail": {
+        "with_semi": [
+          0
+        ],
+        "without_semi": []
+      }
+    },
+    {
+      "test": "FullDH baseline: NDH full pinch is the mode (Sec. 4.1.1)",
+      "ok": true,
+      "detail": {
+        "with_ndh_mode": [
+          0
+        ],
+        "without": [],
+        "assumption": "ndh_release_then_dh_full_pinch"
+      }
+    },
+    {
+      "test": "full-release pinch ungroups everything (Sec. 3.2)",
+      "ok": true,
+      "detail": {
+        "events": [
+          "mode_enter",
+          "group",
+          "mode_exit",
+          "ungroup_all"
+        ]
+      }
+    },
+    {
+      "test": "trial ends on a 250 ms full pinch (Sec. 4.2, Fig. 8)",
+      "ok": true,
+      "detail": {
+        "hold_required_ms": 250,
+        "ended_after_140ms": null,
+        "ended_after_290ms": 850.0,
+        "grouped_at_end": [
+          0
+        ]
+      }
+    },
+    {
+      "test": "all five techniques group the gazed target",
+      "ok": true,
+      "detail": {
+        "SemiDwell": [
+          0
+        ],
+        "SemiSwipe": [
+          0
+        ],
+        "SemiTilt": [
+          0
+        ],
+        "SemiNDH": [
+          0
+        ],
+        "FullDH": [
+          0
+        ]
+      }
+    },
+    {
+      "test": "stimulus layout generator (Sec. 4.1.2)",
+      "ok": true,
+      "detail": {
+        "objects": 40,
+        "targets": 6,
+        "distractors": 34,
+        "window_m": [
+          15.0,
+          6.0
+        ],
+        "lattice": "16x7",
+        "cells_left_empty": 72
+      }
+    },
+    {
+      "test": "design and counterbalancing generator (Sec. 4.1.2)",
+      "ok": true,
+      "detail": {
+        "trials_per_participant": 225,
+        "sequences": 10,
+        "participants_per_sequence": 3.0,
+        "each_technique_in_each_position": [
+          6
+        ]
+      }
+    },
+    {
+      "test": "metric definitions (Sec. 4.3)",
+      "ok": true,
+      "detail": {
+        "asr(2 of 8)": 25.0,
+        "error_rate(1 missed,1 distractor,4 grouped)": 50.0,
+        "ie(6000ms, 80%)": 7500.0,
+        "sus_mean": 5.3333,
+        "path_m": 2.0,
+        "undefined_cases": [
+          "asr with zero subselections",
+          "error rate with an empty final group"
+        ]
+      }
+    },
+    {
+      "test": "ratio metrics are denominator-coupled to target number (Sec. 4.3)",
+      "ok": true,
+      "detail": {
+        "one_accident_per_trial_ratio_pct": {
+          "2": 33.33,
+          "4": 20.0,
+          "6": 14.29
+        },
+        "constant_per_target_accident_rate_ratio_pct": {
+          "2": 0.0,
+          "4": 0.0,
+          "6": 0.0
+        },
+        "implication": "the accidental subselection ratio is not scale free across the target-number factor"
+      }
+    },
+    {
+      "test": "palm translation / rotation logging (Sec. 4.3)",
+      "ok": true,
+      "detail": {
+        "path_length_m": 0.1,
+        "rotation_total_deg": 20.0,
+        "definition": "Sec. 4.3 - palm translation and rotation per frame"
+      }
+    }
+  ]
+}

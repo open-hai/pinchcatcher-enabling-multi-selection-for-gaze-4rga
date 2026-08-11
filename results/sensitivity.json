@@ -1,0 +1,207 @@
+{
+  "gaze collider size": {
+    "parameter": "COLLIDER_SCALE (stated: 3x, Sec. 4.1.3)",
+    "question": "how often the unstated tie-break is invoked at all",
+    "rows": [
+      {
+        "collider_scale": 1.0,
+        "collider_radius_m": 0.2,
+        "rays_hitting_something_pct": 4.83,
+        "of_those_ambiguous_pct": 0.0
+      },
+      {
+        "collider_scale": 1.5,
+        "collider_radius_m": 0.3,
+        "rays_hitting_something_pct": 10.8,
+        "of_those_ambiguous_pct": 0.0
+      },
+      {
+        "collider_scale": 2.0,
+        "collider_radius_m": 0.4,
+        "rays_hitting_something_pct": 18.81,
+        "of_those_ambiguous_pct": 0.0
+      },
+      {
+        "collider_scale": 2.5,
+        "collider_radius_m": 0.5,
+        "rays_hitting_something_pct": 29.7,
+        "of_those_ambiguous_pct": 0.54
+      },
+      {
+        "collider_scale": 3.0,
+        "collider_radius_m": 0.6,
+        "rays_hitting_something_pct": 40.42,
+        "of_those_ambiguous_pct": 7.43
+      },
+      {
+        "collider_scale": 3.5,
+        "collider_radius_m": 0.7,
+        "rays_hitting_something_pct": 50.97,
+        "of_those_ambiguous_pct": 16.2
+      },
+      {
+        "collider_scale": 4.0,
+        "collider_radius_m": 0.8,
+        "rays_hitting_something_pct": 60.98,
+        "of_those_ambiguous_pct": 25.73
+      }
+    ]
+  },
+  "gaze tie-break rule": {
+    "parameter": "GAZE_TIE_BREAK (ASSUMED; the paper states no rule)",
+    "question": "does the choice of rule change which object is subselected",
+    "rays_tested": 20000,
+    "ambiguous_rays": 614,
+    "ambiguous_pct_of_all_rays": 3.07,
+    "min_angle_vs_scene_order_disagree_pct": 47.88,
+    "min_angle_vs_nearest_disagree_pct": 50.98
+  },
+  "swipe activation distance": {
+    "parameter": "SWIPE_TRAVEL_M (ASSUMED 0.10 m; Sec. 3.3.2 gives no distance)",
+    "question": "how many objects one leftward arm excursion can subselect",
+    "leftward_budget_m": 0.6,
+    "rows": [
+      {
+        "swipe_travel_m": 0.02,
+        "objects_grouped_within_0.60m_budget": 8,
+        "predicted_floor_budget_over_travel": 30
+      },
+      {
+        "swipe_travel_m": 0.04,
+        "objects_grouped_within_0.60m_budget": 8,
+        "predicted_floor_budget_over_travel": 15
+      },
+      {
+        "swipe_travel_m": 0.06,
+        "objects_grouped_within_0.60m_budget": 8,
+        "predicted_floor_budget_over_travel": 10
+      },
+      {
+        "swipe_travel_m": 0.08,
+        "objects_grouped_within_0.60m_budget": 7,
+        "predicted_floor_budget_over_travel": 7
+      },
+      {
+        "swipe_travel_m": 0.1,
+        "objects_grouped_within_0.60m_budget": 5,
+        "predicted_floor_budget_over_travel": 5
+      },
+      {
+        "swipe_travel_m": 0.15,
+        "objects_grouped_within_0.60m_budget": 3,
+        "predicted_floor_budget_over_travel": 4
+      },
+      {
+        "swipe_travel_m": 0.2,
+        "objects_grouped_within_0.60m_budget": 2,
+        "predicted_floor_budget_over_travel": 2
+      },
+      {
+        "swipe_travel_m": 0.3,
+        "objects_grouped_within_0.60m_budget": 1,
+        "predicted_floor_budget_over_travel": 2
+      }
+    ],
+    "note": "Sec. 3.3.2 raises exactly this problem - 'since hands can only move a certain distance, a return action is needed' - without giving the distance that sets the limit"
+  },
+  "dwell re-arm rule": {
+    "parameter": "DWELL_REARM (ASSUMED on_collider_exit; Sec. 3.3.1 is silent)",
+    "question": "whether a lingering gaze can toggle an object back off",
+    "rows": [
+      {
+        "stare_ms": 500,
+        "toggles_with_exit_rearm": 0,
+        "toggles_if_timer_just_restarts": 1,
+        "final_state_differs": true
+      },
+      {
+        "stare_ms": 1000,
+        "toggles_with_exit_rearm": 1,
+        "toggles_if_timer_just_restarts": 2,
+        "final_state_differs": true
+      },
+      {
+        "stare_ms": 2000,
+        "toggles_with_exit_rearm": 1,
+        "toggles_if_timer_just_restarts": 4,
+        "final_state_differs": true
+      },
+      {
+        "stare_ms": 3000,
+        "toggles_with_exit_rearm": 1,
+        "toggles_if_timer_just_restarts": 6,
+        "final_state_differs": true
+      }
+    ]
+  },
+  "tilt threshold": {
+    "parameter": "TILT_THRESHOLD_DEG (stated 30 deg, Sec. 3.3.3) with gain 3x",
+    "question": "the stated threshold is recoverable; the sweep shows the consequence of getting it wrong",
+    "rows": [
+      {
+        "hand_threshold_deg": 10.0,
+        "indicator_sweep_deg": 30.0,
+        "toggles_in_a_79deg_roll": 1
+      },
+      {
+        "hand_threshold_deg": 20.0,
+        "indicator_sweep_deg": 60.0,
+        "toggles_in_a_79deg_roll": 1
+      },
+      {
+        "hand_threshold_deg": 30.0,
+        "indicator_sweep_deg": 90.0,
+        "toggles_in_a_79deg_roll": 1
+      },
+      {
+        "hand_threshold_deg": 45.0,
+        "indicator_sweep_deg": 135.0,
+        "toggles_in_a_79deg_roll": 1
+      },
+      {
+        "hand_threshold_deg": 60.0,
+        "indicator_sweep_deg": 180.0,
+        "toggles_in_a_79deg_roll": 1
+      },
+      {
+        "hand_threshold_deg": 90.0,
+        "indicator_sweep_deg": 270.0,
+        "toggles_in_a_79deg_roll": 0
+      }
+    ]
+  },
+  "full-pinch contact threshold": {
+    "parameter": "FULL_PINCH_M (ASSUMED 0.02 m; Fig. 3 says only 'fingertips touching')",
+    "question": "when the quasi-mode collapses into the terminating full pinch",
+    "aperture_trace": "12 cm closing to 1.5 cm over 400 ms, then held",
+    "upper_bound_forced_by_paper": "2 cm - any larger value would overlap the stated 2-7 cm semi-pinch band (Fig. 3)",
+    "rows": [
+      {
+        "full_pinch_threshold_m": 0.005,
+        "grouped_before_trial_end": [
+          0
+        ],
+        "trial_end_ms": null
+      },
+      {
+        "full_pinch_threshold_m": 0.01,
+        "grouped_before_trial_end": [
+          0
+        ],
+        "trial_end_ms": null
+      },
+      {
+        "full_pinch_threshold_m": 0.015,
+        "grouped_before_trial_end": [
+          0
+        ],
+        "trial_end_ms": null
+      },
+      {
+        "full_pinch_threshold_m": 0.02,
+        "grouped_before_trial_end": [],
+        "trial_end_ms": 640
+      }
+    ]
+  }
+}
