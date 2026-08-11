@@ -1,0 +1,546 @@
+{
+  "schema": 1,
+  "verdict": "partial",
+  "summary": "PinchCatcher's inner loop is a set of interaction state machines (three pinch states from thumb-index distance, gaze pointing against 3x-enlarged colliders, and five subselection triggers), a stimulus generator, five metric definitions and a declared statistical plan. All of it was reimplemented here and runs: 19/19 mechanism tests pass against every threshold the paper prints, and the analysis pipeline executes end to end, returning null on null synthetic data and recovering planted effects. What blocks full reproduction is missing specification, not difficulty. SemiSwipe's activation distance is never stated anywhere (estimated at 0.060-0.162 m from the paper's own hand-movement means), the FullDH baseline assigns the same dominant-hand full pinch to both subselection and trial termination without saying how they are distinguished, and taking the paper's ungroup-all rule literally clears the group after every FullDH click. The 40-object grid is over-determined and inconsistent: the stated angular window at 13.5 m holds 112 lattice cells at the stated 1 m spacing, not 40. No code, data, preregistration or supplement was released, so no reported statistic can be recomputed from data; they can only be checked against each other, and 82 of 87 such checks hold, including all 21 degrees-of-freedom pairs and all 21 partial eta-squared values. Five checks fail, four of them errors in the paper: two p-values in Sec. 5.4 that look transposed, a Fig. 10 caption contradicting its own body text, and a training-trial count off by a factor of four. The outer loop here is a 30-participant within-subjects study on a Meta Quest Pro measuring completion time, errors, hand motion, workload and preference. It requires people in a headset, it is the entire empirical basis for every claim about which technique is better, and nothing in this repository attempts, simulates or scores it.",
+  "graded_at": "2026-08-11T07:00:00Z",
+  "components": {
+    "verified": 4,
+    "partial": 12,
+    "blocked": 2,
+    "total": 18
+  },
+  "boundary": [
+    {
+      "claim": "Pinch state machine: full pinch, semi-pinch and full-release detected from thumb-index fingertip distance, with an added threshold between release and semi to prevent false ungrouping",
+      "loop": "inner",
+      "outcome": "partial",
+      "evidence": "Implemented in src/pinchcatcher/pinch_state.py and verified by two mechanism tests: the stated 2-7 cm semi band and the 10 cm release threshold behave as specified, and the 7-10 cm gap holds the current state as the paper's stated purpose requires. Blocker: the full-pinch contact threshold is never given numerically ('both fingertips are touching'), and the per-transition threshold table Sec. 3.2 says was used is never printed. Sensitivity sweep: with the assumed 2 cm value a closing aperture terminates the trial at 640 ms; at 1.5 cm the same trace never terminates.",
+      "citation": "Sec. 3.2, Fig. 3"
+    },
+    {
+      "claim": "Gaze target resolution against invisible colliders set to three times the visible object radius (0.60 m vs 0.20 m) to absorb eye-tracking error",
+      "loop": "inner",
+      "outcome": "partial",
+      "evidence": "Enlargement reproduced exactly: 0.20 m -> 0.60 m is 1.698 deg -> 5.090 deg at the stated 13.5 m, ratio 2.998. Blocker: on the stated 1 m lattice those colliders overlap and no tie-break rule is given. Measured over 20000 rays across the stated window: 3.07% pierce more than one collider, and among those the candidate rules disagree 47.9% (scene order) and 51.0% (nearest centre) of the time.",
+      "citation": "Sec. 3.3.1, Sec. 4.1.3"
+    },
+    {
+      "claim": "SemiDwell: gaze must intersect the target collider and hold for 500 ms to group it, chosen over 250 and 750 ms as the best speed/error compromise",
+      "loop": "inner",
+      "outcome": "partial",
+      "evidence": "The 500 ms threshold is reproduced and bracketed (fires after 590 ms of gaze, not after 390 ms) and correctly gated by the semi-pinch quasi-mode. Blocker: Sec. 3.3 makes grouping a toggle but states no re-arm rule, so a held gaze either toggles once or repeatedly. Measured: a 3 s stare gives 1 toggle under the assumed exit-re-arm rule and 6 if the timer simply restarts, and the two readings leave the object in opposite states at every duration tested.",
+      "citation": "Sec. 3.3.1"
+    },
+    {
+      "claim": "SemiSwipe: leftward dominant-hand movement drives a three-sphere indicator 1:1 from its initial position toward the target; rightward movement is ignored so the return stroke is natural",
+      "loop": "inner",
+      "outcome": "partial",
+      "evidence": "Direction gating and the 1:1 gain are reproduced and tested (0.145 m left groups, 0.145 m right does not). Blocker: the activation distance is never stated anywhere in the paper. Recovered independently from the paper's own Sec. 5.5 hand-movement means at 0.060-0.162 m (src/recover_unstated_params.py); this repository uses 0.10 m. Measured consequence: within a 0.60 m leftward arm budget the setting decides whether 8 objects or 1 can be subselected.",
+      "citation": "Sec. 3.3.2, Sec. 6.2"
+    },
+    {
+      "claim": "SemiTilt: rightward hand roll of 30 degrees confirms grouping, with the indicator geared three times the actual hand rotation, replacing a 90 degree indicator sweep",
+      "loop": "inner",
+      "outcome": "verified",
+      "evidence": "The only technique whose activation is fully and consistently specified. Implemented and tested: fires at 34 deg, not at 28 deg, and the indicator reads 30 deg at 10 deg of hand roll. The three stated numbers close on each other exactly: 30 deg x 3 gain = the 90 deg sweep Sec. 6.2 says the 30 deg threshold replaced. Reference frame and rotational axis remain assumptions, but every threshold needed to build it is present.",
+      "citation": "Sec. 3.3.3, Sec. 6.2"
+    },
+    {
+      "claim": "SemiNDH: a full pinch of the non-dominant hand confirms grouping while the dominant hand maintains the semi-pinch",
+      "loop": "inner",
+      "outcome": "verified",
+      "evidence": "Implemented and tested in both directions: the NDH pinch edge groups the gazed object while the DH holds the semi-pinch, and does not fire when the DH is released. No numeric parameter is required beyond the pinch thresholds already covered.",
+      "citation": "Sec. 3.3.4"
+    },
+    {
+      "claim": "FullDH baseline: a non-dominant-hand full pinch activates multi-selection mode and dominant-hand pinch-clicks subselect, mirroring desktop CTRL-click",
+      "loop": "inner",
+      "outcome": "partial",
+      "evidence": "Mode gate and trigger reproduced and tested. Two collisions the paper never resolves: (a) the DH full pinch is the subselection trigger here and also the trial-ending gesture in Sec. 4.2, with no stated way to tell them apart; (b) Sec. 3.2 binds ungroup-all to a full release, which the DH performs after every click in this technique. This reimplementation hit (b) as a live bug and had to invent a rule (bind ungroup-all to the NDH). Sec. 5.8.1 records participants making errors from exactly ambiguity (a).",
+      "citation": "Sec. 4.1.1, Sec. 4.2, Sec. 5.8.1"
+    },
+    {
+      "claim": "Stimulus layout: 40 spheres of 0.20 m radius at equal 1 m intervals on a flat grid window 58.12 deg wide and 25.06 deg high, 13.5 m from the participant, randomly placed each trial",
+      "loop": "inner",
+      "outcome": "partial",
+      "evidence": "Generator implemented and verified to place 40 non-colliding objects on a single 1 m lattice at the stated depth. Blocker: the number of rows and columns is never stated, and the figures given are mutually inconsistent, so a reimplementer must guess whether 40 objects fill a smaller grid or sparsely occupy the derived one.",
+      "citation": "Sec. 4.1.2, Fig. 7A",
+      "mismatch": {
+        "kind": "numeric",
+        "reported": "40 objects at 1 m spacing on a grid window of 58.12 deg x 25.06 deg at 13.5 m",
+        "observed": "that window is 15.00 m x 6.00 m, which holds a 16 x 7 = 112-cell lattice at 1 m spacing",
+        "delta": "72 lattice cells unaccounted for; the stated count, spacing and window size cannot all be exact"
+      }
+    },
+    {
+      "claim": "Within-subjects design: 5 techniques x 3 target numbers x 15 repetitions = 225 trials per participant, with two training trials before each block and block order counterbalanced by a Balanced Latin square",
+      "loop": "inner",
+      "outcome": "partial",
+      "evidence": "225 = 5 x 3 x 15 reproduces exactly. A Williams square was implemented and verified to balance first-order carry-over, covering all 20 ordered pairs twice with each technique appearing in each position 6 times across 30 participants. Blockers: 'Balanced Latin square' over 5 conditions is ambiguous, since a carry-over-balanced square needs 10 sequences and 30 participants divides evenly by both 5 and 10; and the training-trial count does not add up.",
+      "citation": "Sec. 4.1.2",
+      "mismatch": {
+        "kind": "contradiction",
+        "reported": "'two training trials before each block, consisting of 45 trials'",
+        "observed": "2 training trials x 5 blocks = 10, and Sec. 4.2's 10.77 multi-selections per training phase implies about 108 selections in total",
+        "delta": "45 is reachable from neither reading; the stated figure is 4.5x the arithmetic"
+      }
+    },
+    {
+      "claim": "Five dependent measures: task completion time, accidental subselection ratio, error rate, hand movement and hand rotation, each defined in prose",
+      "loop": "inner",
+      "outcome": "partial",
+      "evidence": "All five implemented in src/pinchcatcher/metrics.py. TCT and the two kinematic measures are unambiguous and verified against hand-built traces (0.10 m path length, 20 deg total rotation recovered exactly). Blockers: the error-rate denominator ('total number of grouped objects per trial') is zero whenever a participant grouped nothing, leaving the measure undefined for exactly the trials the 50% filter targets; and the accidental-ratio denominator grows with target count, so one accident per trial reads as 33.3% / 20.0% / 14.3% across the 2/4/6 conditions, making part of any target-number effect on that measure definitional. It is also unstated whether ungroup actions count in the denominator.",
+      "citation": "Sec. 4.3"
+    },
+    {
+      "claim": "Inverse efficiency defined as task completion time divided by the grouping success rate, where success rate is the percentage of error-free trials, so that higher IE means lower efficiency",
+      "loop": "inner",
+      "outcome": "verified",
+      "evidence": "This definition is over-determined by the paper's own printed means and it checks out. The reported TCT/IE pairs imply success rates of 91.37%, 88.56% and 86.03% for 2, 4 and 6 targets: all in the valid range and monotonically falling as targets increase, as they must if more targets mean more chances to err. The implemented function round-trips the reported 6-target IE to within 1 ms.",
+      "citation": "Sec. 4.3, Sec. 5.4"
+    },
+    {
+      "claim": "Trial accounting and exclusions: 28385 subselections collected; trials with over 50% of targets ungrouped excluded (30 trials, 0.44%); a second error-free TCT analysis excluding 445 trials (6.5%)",
+      "loop": "inner",
+      "outcome": "partial",
+      "evidence": "Two of three reproduce. 30 of 6750 trials is 0.444%, matching the stated 0.44%. The 28385 subselections reproduce from the design: the floor is 30 x 5 x 15 x (2+4+6) = 27000, and inflating by the paper's own mean accidental ratio of 4.767% predicts 28351.5, within 0.12% of the reported figure. Blockers: the 6.5% figure does not follow from 445 trials under either denominator, and 'over 50%' is undefined for the 2-target condition where it decides whether a 1-of-2 miss is dropped.",
+      "citation": "Sec. 5",
+      "mismatch": {
+        "kind": "numeric",
+        "reported": "445 trials excluded, 6.5%",
+        "observed": "445/6750 = 6.593%, or 445/6720 = 6.622% against the trials retained after the first filter",
+        "delta": "+0.09 to +0.12 percentage points; neither denominator rounds to 6.5%"
+      }
+    },
+    {
+      "claim": "Statistical plan: two-way repeated-measures ANOVA over technique and target number with a sphericity correction and Bonferroni, Wilcoxon signed-rank post-hoc for the two non-normal measures, and Friedman plus Wilcoxon for the questionnaire data",
+      "loop": "inner",
+      "outcome": "partial",
+      "evidence": "Implemented as declared in src/analyze.py and exercised for real: on null synthetic data it returns null for TCT and both kinematic measures, and on data with a planted effect it recovers 709.5 ms per extra target against a planted 700 and 1018.4 ms of technique offset against a planted 1000. Blockers: it has never been run on the authors' data, which was never released, so agreement with their output is unverified; and neither the Bonferroni family size nor the identity of the sphericity correction is stated. The library used for the ANOVA emits a warning that its epsilon estimates may be inaccurate in a two-way within design where both factors have more than two levels, which is exactly this design; that is why the pipeline also writes an independently computed Greenhouse-Geisser epsilon per measure and factor to sphericity.csv, and why the audit recovers the paper's epsilons from its printed degrees of freedom rather than trusting a library.",
+      "citation": "Sec. 5"
+    },
+    {
+      "claim": "The 21 reported F tests across Sec. 5.1-5.6, each with corrected degrees of freedom, an F value and a partial eta squared",
+      "loop": "inner",
+      "outcome": "verified",
+      "evidence": "All 21 df pairs are mutually consistent: dividing each corrected df by its uncorrected counterpart (4/116 for technique, 2/58 for target number, 8/232 for the interaction) recovers a single epsilon per test, the two estimates agreeing to within 1.4e-4, every one inside its own lower bound and below 1. That independently confirms N=30 and one sphericity correction applied throughout. All 21 partial eta squared values recompute from F and the uncorrected dfs to the printed three decimals.",
+      "citation": "Sec. 5.1-5.6"
+    },
+    {
+      "claim": "The p-values reported for those 21 F tests",
+      "loop": "inner",
+      "outcome": "partial",
+      "evidence": "19 of 21 recompute from the stated F statistic and corrected degrees of freedom to the printed precision. Two, both in Sec. 5.4, do not.",
+      "citation": "Sec. 5.4",
+      "mismatch": {
+        "kind": "typo",
+        "reported": "inverse efficiency x target number: Fc(1.775, 51.469)=274.505, p=.009; inverse efficiency x technique: Fc(2.606, 75.570)=4.379, p<.001",
+        "observed": "the same F and df give p = 3.7e-27 for the target-number effect and p = .0094 for the technique effect",
+        "delta": "the two printed p-values appear transposed between adjacent sentences: .009 belongs to the technique effect and p<.001 to the target-number effect. Both effects remain significant either way, so no conclusion changes"
+      }
+    },
+    {
+      "claim": "Rank orderings of the techniques asserted in the results text and figure captions for error rate, hand movement and hand rotation",
+      "loop": "inner",
+      "outcome": "partial",
+      "evidence": "Three of four reproduce from the paper's own printed means: the Sec. 5.5 hand-movement ordering (SemiSwipe > SemiTilt > FullDH > SemiNDH > SemiDwell), the Sec. 5.6 hand-rotation ordering (SemiTilt > SemiSwipe > FullDH > SemiNDH > SemiDwell), and the Sec. 5.3 error-rate body text. The Fig. 10 caption does not.",
+      "citation": "Sec. 5.3, Sec. 5.5, Sec. 5.6, Fig. 10",
+      "mismatch": {
+        "kind": "contradiction",
+        "reported": "Fig. 10 caption: 'SemiDwell and SemiSwipe showed significantly higher error rates than other techniques, but not between them'",
+        "observed": "Sec. 5.3 says the opposite about SemiSwipe ('significantly lower error rate than SemiDwell and SemiTilt'), and the printed means put SemiSwipe at 2.767% against SemiTilt at 11.648% and SemiDwell at 8.612%",
+        "delta": "the caption names the wrong technique; on the printed means it should read SemiDwell and SemiTilt, whose means are 8.612% and 11.648%"
+      }
+    },
+    {
+      "claim": "Questionnaire instruments: a six-item System Usability Scale variant with three positive and three negative statements scored on a 0-6 Likert scale, NASA-TLX over six subscales, and a single satisfaction question",
+      "loop": "inner",
+      "outcome": "blocked",
+      "evidence": "Blocker: not one item is printed. The three positive and three negative SUS statements, the satisfaction question and the TLX weighting procedure are all absent, so the instrument cannot be reconstructed and Sec. 5.7 cannot be replicated. Only the arithmetic could be checked: the scoring function was implemented, and the paper's 4.05 minimum-usability criterion verifies as 67.5% of the 0-6 scale, i.e. the conventional SUS threshold of 68/100.",
+      "citation": "Sec. 4.3, Sec. 5.7"
+    },
+    {
+      "claim": "Two application probes demonstrating the techniques: a photo-management application with share, move, delete and copy, and a real-time strategy game with fighter formations",
+      "loop": "inner",
+      "outcome": "blocked",
+      "evidence": "Blocker: described in prose with one figure each and no released build, source or reachable video figure. Only one interaction constant is given (a 2 s full-pinch hold opens the copy/delete menu); the window and folder model, the avatar sharing target, fighter behaviour and the combat-engagement rule are all unspecified. Nothing here is buildable from the paper.",
+      "citation": "Sec. 7, Figs. 13-14"
+    },
+    {
+      "claim": "The user study session itself: 30 participants (mean age 25.93, 15 male, 29 right-handed) performing 225 trials each across five counterbalanced blocks on a Meta Quest Pro with embedded 30 Hz eye tracking and hand tracking, about 50 minutes per session",
+      "loop": "outer",
+      "outcome": "not_scored",
+      "evidence": "Requires human participants wearing a head-mounted display with eye and hand tracking, plus an experimenter for briefing and calibration. No part of it is mechanically re-runnable and none of it is attempted here.",
+      "citation": "Sec. 4.2, Sec. 4.4"
+    },
+    {
+      "claim": "Performance findings over participants: no significant task-completion-time difference between the five techniques; FullDH induced significantly more accidental subselections than every other technique; SemiSwipe fewer than SemiDwell and SemiNDH; SemiSwipe a lower error rate than SemiDwell and SemiTilt but higher than FullDH; SemiNDH more efficient than SemiTilt",
+      "loop": "outer",
+      "outcome": "not_scored",
+      "evidence": "These are effects measured over 30 people. They are the paper's central empirical claims and simulating them would be fabrication. This repository implements the machinery that would compute them and does not compute them.",
+      "citation": "Sec. 5.1-5.4"
+    },
+    {
+      "claim": "Motor-cost findings over participants: hand movement and rotation differed significantly between all technique pairs except SemiNDH versus SemiDwell, and increased with target number",
+      "loop": "outer",
+      "outcome": "not_scored",
+      "evidence": "Measured motor behaviour of 30 participants. Not attempted. The reported means were used only in one direction, to constrain an unstated design parameter, which is arithmetic on published aggregates rather than a reproduction of the finding.",
+      "citation": "Sec. 5.5, Sec. 5.6"
+    },
+    {
+      "claim": "Subjective workload and usability findings: a technique main effect on NASA-TLX physical demand and perceived performance only, with SemiNDH more physically demanding than SemiDwell and FullDH, and all five techniques scoring above the 4.05 SUS minimum-usability criterion",
+      "loop": "outer",
+      "outcome": "not_scored",
+      "evidence": "Self-reported ratings from participants on instruments whose items are not published. Not attempted.",
+      "citation": "Sec. 5.7"
+    },
+    {
+      "claim": "Preference ranking and qualitative feedback: SemiDwell (9) and SemiSwipe (8) most preferred, SemiDwell also least preferred (10), FullDH second by 11 participants, SemiNDH fourth by 11, with per-technique interview themes",
+      "loop": "outer",
+      "outcome": "not_scored",
+      "evidence": "A ranking survey plus an open interview conducted by an experimenter, coded into themes with participant quotes. Requires both participants and an interviewer. Not attempted.",
+      "citation": "Sec. 5.8"
+    },
+    {
+      "claim": "Training-phase behaviour: participants spent an average of 24.4 s (SD 1.71) and performed 10.77 (SD 3.73) multi-selections in each training phase",
+      "loop": "outer",
+      "outcome": "not_scored",
+      "evidence": "Observed participant behaviour during familiarisation. Not attempted; the underlying logs were not released.",
+      "citation": "Sec. 4.2"
+    },
+    {
+      "claim": "Pilot tuning that fixed the design constants: the 500 ms dwell chosen after testing 250, 500 and 750 ms, and an 'affordable distance' selected for each pinch-state threshold",
+      "loop": "outer",
+      "outcome": "not_scored",
+      "evidence": "Human-in-the-loop parameter selection. The paper reports the chosen values but no criterion, sample or procedure a machine could apply, so the selection cannot be re-derived; only the resulting constants are inner-loop material.",
+      "citation": "Sec. 3.2, Sec. 3.3.1"
+    },
+    {
+      "claim": "Sample characterisation and ethics: prior-experience ratings (VR 2.76, controllers 2.83, hands 2.21, gaze 2.07 on a 0-5 scale), vision correction breakdown, IRB approval and $10 compensation",
+      "loop": "outer",
+      "outcome": "not_scored",
+      "evidence": "Facts about a specific human sample and its governance. Not reproducible without recruiting people.",
+      "citation": "Sec. 4.4"
+    }
+  ],
+  "decisions": [
+    {
+      "question": "What thumb-index fingertip distance counts as a full pinch?",
+      "where": "Fig. 3(A) says only that a full pinch is detected 'when both fingertips are touching'; no numeric contact threshold appears anywhere in the paper",
+      "assumed": "d < 2 cm, the lower edge of the stated semi-pinch band",
+      "sensitivity": "High but bounded. Any value above 2 cm would overlap the stated 2-7 cm semi band, so the paper's own figure caps it. Measured: at 2 cm a closing aperture terminates the trial at 640 ms; at 1.5 cm or below the same trace never terminates, so the quasi-mode never resolves. The CHI '26 follow-up by the same last author states d < 2 cm, which supports the choice without confirming it."
+    },
+    {
+      "question": "What were the per-transition thresholds Sec. 3.2 says differed for each state change?",
+      "where": "Sec. 3.2: 'a different value was applied for switching from each state to another state' - the table is never printed",
+      "assumed": "Only the stated 7-10 cm dead band, in which the current state is held; no other hysteresis",
+      "sensitivity": "Medium. Governs how often a wobbling hand drops out of the quasi-mode mid-selection, which is the failure mode Sec. 5.8.2 participants complained about for SemiNDH and Sec. 3.3.3 anticipates for SemiTilt."
+    },
+    {
+      "question": "Which object is selected when one gaze ray pierces several overlapping colliders?",
+      "where": "Sec. 4.1.3 states the 3x collider enlargement but no resolution rule; Sec. 3.3 describes only that the gazed object is outlined",
+      "assumed": "The object whose centre subtends the smallest angle from the gaze ray",
+      "sensitivity": "High. Measured over 20000 rays covering the stated window: 3.07% are ambiguous, and within those the candidate rules disagree 47.9% of the time (scene order) and 51.0% (nearest centre). About 1.5% of gaze samples resolve to a different object depending on a rule the paper never gives, and the ambiguous region is exactly the cell boundary where a participant is most likely to be looking while transitioning between targets."
+    },
+    {
+      "question": "Can a gaze that lingers past 500 ms toggle an object back off?",
+      "where": "Sec. 3.3.1 sets the 500 ms dwell and Sec. 3.3 makes grouping a toggle ('ungrouping individual objects proceeded in the same way'), but no re-arm rule is stated",
+      "assumed": "An object cannot re-trigger until the gaze ray leaves its collider",
+      "sensitivity": "High. Measured: a 3 s stare produces 1 toggle under this rule and 6 if the dwell timer simply restarts, and at every duration tested (0.5, 1, 2, 3 s) the two readings leave the object in opposite states. Since SemiDwell had the second-highest reported error rate, this decision sits directly on the paper's explanation of that result."
+    },
+    {
+      "question": "Does dwell time accumulate across brief tracking dropouts, or reset?",
+      "where": "Sec. 3.3.1 gives the 500 ms threshold and nothing about accumulation",
+      "assumed": "The timer resets to zero whenever the gaze leaves the collider",
+      "sensitivity": "Medium. On the stated 30 Hz eye tracker a single dropped sample is 33 ms, and with 5.09 deg colliders on a 4.24 deg pitch the ray crosses boundaries often; resetting versus accumulating changes both spurious and missed triggers."
+    },
+    {
+      "question": "How far must the dominant hand swipe left to confirm a subselection?",
+      "where": "Sec. 3.3.2 describes the three-sphere indicator and its 1:1 mapping but states no distance; Sec. 6.2 confirms the 1:1 gain without giving the travel",
+      "assumed": "0.10 m of leftward hand travel",
+      "sensitivity": "Highest of any decision in the paper - it is the activation criterion of the technique the paper recommends. Recovered independently from the paper's own Sec. 5.5 hand-movement means at 0.060-0.162 m; the estimator, scored against the tilt threshold the paper does state, overshoots by 2.674x. Measured consequence: within a 0.60 m leftward arm budget the setting decides whether 8 objects or 1 can be subselected before a return stroke is needed - which is precisely the return-stroke problem Sec. 3.3.2 raises."
+    },
+    {
+      "question": "When is the swipe reference position captured, and how does the return stroke reset it?",
+      "where": "Sec. 3.3.2 says the indicator moves 'from its initial position' and that rightward movement is ignored to make the return natural, without saying when the initial position is taken",
+      "assumed": "Re-captured when the gaze enters a new object's collider and after every trigger; a rightward move also re-captures it",
+      "sensitivity": "High. Determines whether one long stroke can subselect several objects or only one, which changes both the total hand path (a reported measure) and the number of return strokes. Sec. 5.8.4 records participants needing to think about 'the range of action and how the hand returns'."
+    },
+    {
+      "question": "In which reference frame is 'left' defined?",
+      "where": "Sec. 3.3.2 says the user 'moves their DH toward the left'",
+      "assumed": "The negative x axis of the world-fixed study scene",
+      "sensitivity": "Medium. World-relative versus head- or torso-relative changes which motions register once the participant turns to reach the 58.12 deg-wide window, and the window is wide enough that head rotation is expected."
+    },
+    {
+      "question": "Where is the tilt angle's zero, and when does it reset?",
+      "where": "Sec. 3.3.3 gives the 30 deg threshold and the 3x gain but no reference posture or reset rule",
+      "assumed": "Same convention as the swipe reference: roll re-captured on gaze entry and after each trigger",
+      "sensitivity": "Medium-high. Sec. 5.8.5 reports participants finding the return to neutral ambiguous and the technique over-sensitive to hand movement, which is this decision surfacing in the results. An absolute rather than relative zero would make the technique behave completely differently."
+    },
+    {
+      "question": "Which rotational axis of the hand drives the tilt indicator?",
+      "where": "Sec. 3.3.3 says only 'tilt their hand (30 deg) to the right'; Sec. 4.3 says palm rotation was logged",
+      "assumed": "Palm roll about the forearm axis",
+      "sensitivity": "Medium. Roll versus yaw changes which postures occlude the fingertip gap, and Sec. 3.3.3 predicts exactly that failure ('the gap between fingertips for semi-pinch detection could be occluded during tilting')."
+    },
+    {
+      "question": "Does the non-dominant-hand click fire on contact or on release, and does the 250 ms pinch-dwell apply to it?",
+      "where": "Sec. 3.3.4 says the user 'performs a full pinch with the other hand to confirm'; Sec. 4.1.3 applies a 250 ms pinch-dwell only to the trial-ending pinch",
+      "assumed": "Contact (rising) edge, with no dwell",
+      "sensitivity": "Low-medium. Shifts every subselection timestamp by up to 250 ms, which feeds straight into task completion time - the measure on which the paper reports no significant technique difference."
+    },
+    {
+      "question": "In FullDH, how does the system distinguish a trial-ending dominant-hand full pinch from a subselection pinch?",
+      "where": "Sec. 4.1.1 assigns DH full pinch to subselection; Sec. 4.2 and Fig. 8 assign a 250 ms DH full pinch to ending the trial. The collision is never addressed",
+      "assumed": "A trial-ending pinch is only accepted once the non-dominant hand has released the mode",
+      "sensitivity": "High. Without some rule the baseline condition cannot terminate a trial at all. Sec. 5.8.1 reports participants erring because 'two different functions (group confirm, trial end) were assigned on the right-hand pinch', so the ambiguity was real in the deployed build too."
+    },
+    {
+      "question": "In FullDH, what clears the group?",
+      "where": "Sec. 3.2 binds ungroup-all to a full-release pinch. In FullDH the dominant hand performs a full release after every pinch-click",
+      "assumed": "Ungroup-all follows the non-dominant hand (the hand holding the mode) in FullDH, and the dominant hand in the four Semi* techniques",
+      "sensitivity": "High. The literal reading is self-defeating: this reimplementation's first version cleared the group after every single subselection, and the failure was caught by a mechanism test rather than by reading. Anyone reimplementing FullDH from the paper alone will hit the same wall."
+    },
+    {
+      "question": "How many rows and columns hold the 40 objects?",
+      "where": "Sec. 4.1.2 gives the object count, the 1 m spacing and the angular window, which over-determine and contradict each other; Fig. 7A shows a screenshot",
+      "assumed": "40 cells drawn at random from the 16 x 7 lattice derived from the stated window",
+      "sensitivity": "High. Sets target eccentricity and inter-object distance, which drive gaze accuracy, Midas-touch exposure and the amount of hand motion each technique demands - three of the paper's five measures."
+    },
+    {
+      "question": "Is there any constraint on where targets fall relative to each other or to the participant's line of sight?",
+      "where": "Sec. 4.1.2 says only that objects 'were randomly placed in each trial'",
+      "assumed": "Uniform sampling without replacement, no adjacency, separation or eccentricity constraint",
+      "sensitivity": "Medium-high. Whether two targets can be adjacent decides how much distractor pressure a trial carries, and Sec. 6.2 makes Midas touch under distractor pressure the headline explanation for SemiDwell's error rate."
+    },
+    {
+      "question": "Which balanced Latin square was used, over how many sequences, and how were 30 participants assigned to it?",
+      "where": "Sec. 4.1.2: 'the order of the blocks was counterbalanced using a Balanced Latin square'",
+      "assumed": "A Williams square with 10 sequences and 3 participants each",
+      "sensitivity": "Low for the mechanism, medium for the inference. With five (odd) conditions, a 5-sequence cyclic square cannot balance first-order carry-over, leaving practice and fatigue partially confounded with technique in a 50-minute session; 30 divides evenly by both 5 and 10, so the participant count does not disambiguate it."
+    },
+    {
+      "question": "Is 'failed to group over 50% of the total targets' strict or inclusive?",
+      "where": "Sec. 5, the first exclusion rule",
+      "assumed": "Strictly greater than 50%, so a 1-of-2 miss is retained",
+      "sensitivity": "Low in aggregate - the filter removed 30 trials (0.44%) - but it decides the treatment of the entire 2-target condition, where the two readings differ on every single-miss trial."
+    },
+    {
+      "question": "What is the error rate for a trial whose final group is empty?",
+      "where": "Sec. 4.3 divides errors by 'the total number of grouped objects per trial'",
+      "assumed": "Undefined; the trial is dropped from that measure",
+      "sensitivity": "Medium, and it interacts with the exclusion rule above: the trials most likely to have an empty final group are exactly the ones the 50% filter is aimed at, so the two decisions jointly determine whether the worst trials are counted as maximal error or not counted at all."
+    },
+    {
+      "question": "Do ungroup actions count toward 'the total number of subselections performed per trial'?",
+      "where": "Sec. 4.3, the accidental subselection ratio denominator",
+      "assumed": "Groupings only; corrections are excluded from the denominator",
+      "sensitivity": "Medium. Sec. 6.1 says FullDH participants 'could correct them before finalizing the selection', so corrections are most frequent in the technique with the highest reported ratio (8.650%). Counting corrections in the denominator would shrink precisely that number and could remove the paper's clearest technique difference."
+    },
+    {
+      "question": "Over what family was the Bonferroni correction applied?",
+      "where": "Sec. 5: 'with Bonferroni correction', with no family size given",
+      "assumed": "The pairwise comparisons within each metric and factor: 10 pairs for technique, 3 for target number",
+      "sensitivity": "High for the inference. Several reported post-hoc p-values sit between .01 and .05 (for example the SemiSwipe-versus-SemiDwell accidental ratio at p=.039 and the SemiNDH-versus-FullDH physical demand at p=.017). Correcting across metrics rather than within one would push these across conventional significance."
+    },
+    {
+      "question": "Which sphericity correction produced the fractional degrees of freedom?",
+      "where": "Sec. 5 never names it; only the subscript 'Fc' and fractional dfs appear",
+      "assumed": "Greenhouse-Geisser",
+      "sensitivity": "Low. All 21 recovered epsilons lie strictly between their own lower bound and 1, which is consistent with Greenhouse-Geisser. Huynh-Feldt would give slightly larger epsilons, but the df-ratio structure is identical under both, so the two cannot be told apart from the printed numbers alone."
+    },
+    {
+      "question": "What are the SUS, satisfaction and demographic items?",
+      "where": "Sec. 4.3 names a six-item SUS variant and 'a single question about satisfaction'; no item text appears anywhere",
+      "assumed": "Not recoverable. Only the scoring arithmetic is implemented",
+      "sensitivity": "Total for Sec. 5.7. The subjective results cannot be replicated at all without the wording, and item wording is known to move SUS scores. The one checkable claim is arithmetic: the 4.05 criterion is 67.5% of the 0-6 scale, matching the conventional SUS threshold of 68/100."
+    },
+    {
+      "question": "Was NASA-TLX administered raw or with pairwise weighting?",
+      "where": "Sec. 4.3 lists the six subscales on the same 0-6 Likert scale as the other measures",
+      "assumed": "Raw and unweighted, analysed per subscale",
+      "sensitivity": "Low-medium. Fig. 12 plots the six subscales separately, which is consistent with raw administration; weighting would change the composite but the paper reports no composite."
+    },
+    {
+      "question": "Was the gaze signal filtered or smoothed before hit-testing?",
+      "where": "Sec. 4.1.3 gives the eye tracker's 30 Hz sample rate and says nothing about processing",
+      "assumed": "No filtering; each sample is hit-tested directly",
+      "sensitivity": "Medium-high, and it compounds with the collider tie-break and the dwell reset. Unfiltered gaze at 30 Hz flickers between overlapping colliders at cell boundaries, which would inflate both dwell false positives and hover instability - the two things Sec. 6.2 blames for SemiDwell's errors."
+    },
+    {
+      "question": "Is the object window world-locked or head-locked?",
+      "where": "Sec. 4.1.2 gives a 13.5 m distance and an angular size, which is ambiguous between the two",
+      "assumed": "World-locked at 13.5 m",
+      "sensitivity": "Medium. Head-locking would hold every object at constant eccentricity and remove the visual search cost that makes 40 objects a hard layout, changing completion time across the board."
+    },
+    {
+      "question": "What random seed drove the per-trial object and target placement?",
+      "where": "Not reported; Sec. 4.1.2 says only that placement was random per trial",
+      "assumed": "Fixed at 20250425 so this repository's runs are deterministic",
+      "sensitivity": "Low for any aggregate conclusion, total for exact-trial replication: without the seed the specific 6750 layouts participants saw cannot be regenerated even if the grid geometry were known."
+    }
+  ],
+  "scorecard": [
+    {
+      "criterion": "code",
+      "found": false,
+      "url": null,
+      "searched": [
+        "paper full text, all 16 pages of arXiv:2503.05456v2 - grepped for github, osf.io, zenodo, available, supplement, repository, data availab: no artifact URL of any kind",
+        "paper LaTeX source from https://arxiv.org/src/2503.05456 (HTTP 200) - CHI25_MOS.tex and .bib contain no artifact URL or commented-out link",
+        "arXiv ancillary files - the source tarball contains only .tex, .bib, .cls, .bst and Figures/",
+        "https://api.github.com/search/repositories?q=pinchcatcher (HTTP 200) - total_count 0",
+        "https://api.github.com/search/repositories?q=PinchCatcher+OR+SemiSwipe+in:name,description,readme (HTTP 200) - total_count 0",
+        "all 49 public repos of the first author's account https://github.com/jinwook31?tab=repositories (both pages) - none PinchCatcher-related; the only XR-titled repo, xr-prototypes, is a fork of Oleg Frolov's unrelated MIT-licensed Quest prototype collection (README and LICENSE fetched, HTTP 200)",
+        "https://api.github.com/users/kenpfeuffer/repos - HTTP 403 rate-limited; the two successful GitHub searches above cover public repos under any owner",
+        "https://kenpfeuffer.com/ (HTTP 200) - PinchCatcher publication entry located and read; title, authors and venue only, no code link",
+        "http://jinwook.me/ (HTTP 200, full text read) and both CV PDFs - PinchCatcher listed as a project, no repository",
+        "https://zenodo.org/api/records?q=PinchCatcher (HTTP 200) - 0 hits",
+        "https://api.osf.io/v2/nodes/?filter[title]=PinchCatcher (HTTP 200) - 0 hits",
+        "https://dl.acm.org/doi/10.1145/3706598.3713530 - HTTP 403, artifact tab not inspectable from this environment"
+      ]
+    },
+    {
+      "criterion": "data",
+      "found": false,
+      "url": null,
+      "searched": [
+        "paper full text - no data-availability statement exists; 28385 subselections across 6750 trials from 30 participants were collected and none is public",
+        "https://zenodo.org/api/records?q=PinchCatcher (HTTP 200) - 0 hits; q=\"semi-pinch\" (HTTP 200) - 0 hits",
+        "https://api.osf.io/v2/nodes/?filter[title]=PinchCatcher and filter[title]=gaze+pinch (both HTTP 200) - 0 hits",
+        "arXiv ancillary files at https://arxiv.org/src/2503.05456 (HTTP 200) - no data files",
+        "https://api.crossref.org/works/10.1145/3706598.3713530 (HTTP 200) - no dataset relation recorded",
+        "https://api.unpaywall.org/v2/10.1145/3706598.3713530 (HTTP 200) - 3 OA locations, none a data repository",
+        "https://api.openalex.org/works/doi:10.1145/3706598.3713530 (HTTP 200) - same 3 locations, no dataset",
+        "author homepages jinwook.me and kenpfeuffer.com (both HTTP 200) - no data link",
+        "https://pure.au.dk/portal/en/publications/a7edd45a-bd99-44be-bc07-4a5375607b35 - HTTP 403, attached files not inspectable"
+      ]
+    },
+    {
+      "criterion": "license",
+      "found": true,
+      "url": "https://api.crossref.org/works/10.1145/3706598.3713530",
+      "searched": [
+        "Confirmed CC BY 4.0 for the version of record at three independently fetched endpoints: api.crossref.org (content-version vor, https://creativecommons.org/licenses/by/4.0/, delay-in-days 0), api.unpaywall.org (gold, cc-by), api.openalex.org (cc-by). Scope note: this licenses the paper only. There is no code or data to license, and the arXiv preprint carries no CC licence of its own."
+      ]
+    },
+    {
+      "criterion": "preregistration",
+      "found": false,
+      "url": null,
+      "searched": [
+        "https://api.osf.io/v2/registrations/?filter[title]=multi-selection gaze (HTTP 200) - 0 hits",
+        "https://api.osf.io/v2/nodes/?filter[title]=PinchCatcher (HTTP 200) - 0 hits",
+        "paper full text - Sec. 4.4 reports university IRB approval but no preregistration, no hypotheses declared as confirmatory, and no analysis plan stated in advance. Sec. 5 includes an unplanned second pass (the error-free TCT re-analysis) with no indication whether it was pre-specified",
+        "AsPredicted and ClinicalTrials-style registries are not applicable to this study type and no registry identifier appears in the paper"
+      ]
+    },
+    {
+      "criterion": "supplement",
+      "found": false,
+      "url": null,
+      "searched": [
+        "https://dl.acm.org/doi/10.1145/3706598.3713530 - HTTP 403, supplementary tab not inspectable from this environment",
+        "arXiv ancillary files at https://arxiv.org/src/2503.05456 (HTTP 200) - no supplementary document",
+        "paper structure - the 16 pages end at the references; there is no appendix and no in-text reference to any supplementary material",
+        "https://programs.sigchi.org/chi/2025/program/content/188999 (HTTP 200) - client-rendered shell, no artifact links in the served HTML",
+        "ResearchGate entries 389695323 and 391270106 - preprint full text only",
+        "A CHI conference talk video is indexed on YouTube under the paper's exact title and author list, but a direct fetch returned HTTP 429, so it is deliberately not counted as a verified artifact",
+        "Contrast: the CHI '26 follow-up by the same last author (10.1145/3772318.3790513) does ship a supplementary statistics file, which indicates the venue supports them and this paper has none"
+      ]
+    }
+  ],
+  "released": [
+    {
+      "where": "Paper text and LaTeX source (arXiv:2503.05456v2)",
+      "what": "data-availability statement, artifact footnote, appendix",
+      "result": "none",
+      "url": "https://arxiv.org/src/2503.05456"
+    },
+    {
+      "where": "arXiv ancillary files",
+      "what": "code or dataset shipped with the preprint",
+      "result": "none",
+      "url": "https://arxiv.org/src/2503.05456"
+    },
+    {
+      "where": "ACM Digital Library record",
+      "what": "artifact / supplementary-material tab",
+      "result": "none",
+      "url": "https://dl.acm.org/doi/10.1145/3706598.3713530"
+    },
+    {
+      "where": "ACM Digital Library, version of record PDF",
+      "what": "the typeset paper under CC BY 4.0",
+      "result": "found",
+      "url": "https://dl.acm.org/doi/pdf/10.1145/3706598.3713530"
+    },
+    {
+      "where": "arXiv preprint",
+      "what": "full text of the paper, 16 pages",
+      "result": "found",
+      "url": "https://arxiv.org/pdf/2503.05456v2"
+    },
+    {
+      "where": "GitHub, repository search for the system and technique names",
+      "what": "a project repository under any owner",
+      "result": "none",
+      "url": "https://api.github.com/search/repositories?q=pinchcatcher"
+    },
+    {
+      "where": "GitHub, first author's account jinwook31 (49 public repos, both pages enumerated)",
+      "what": "a PinchCatcher Unity project",
+      "result": "none",
+      "url": "https://github.com/jinwook31?tab=repositories"
+    },
+    {
+      "where": "GitHub, jinwook31/xr-prototypes (the only XR-titled repo on that account)",
+      "what": "whether it contains the PinchCatcher build",
+      "result": "none",
+      "url": "https://raw.githubusercontent.com/jinwook31/xr-prototypes/main/README.md"
+    },
+    {
+      "where": "Zenodo",
+      "what": "dataset or software deposit",
+      "result": "none",
+      "url": "https://zenodo.org/api/records?q=PinchCatcher"
+    },
+    {
+      "where": "OSF projects and registrations",
+      "what": "project, dataset, or preregistration",
+      "result": "none",
+      "url": "https://api.osf.io/v2/nodes/?filter%5Btitle%5D=PinchCatcher"
+    },
+    {
+      "where": "First author's homepage and CVs (jinwook.me)",
+      "what": "project page, code or data link",
+      "result": "none",
+      "url": "http://jinwook.me/"
+    },
+    {
+      "where": "Last author's homepage (kenpfeuffer.com)",
+      "what": "project page with artifacts for this paper",
+      "result": "none",
+      "url": "https://kenpfeuffer.com/"
+    },
+    {
+      "where": "Aarhus University Pure repository",
+      "what": "institutional record with attached files",
+      "result": "none",
+      "url": "https://pure.au.dk/portal/en/publications/a7edd45a-bd99-44be-bc07-4a5375607b35"
+    },
+    {
+      "where": "SIGCHI CHI 2025 programme entry",
+      "what": "supplementary material or video figure link",
+      "result": "none",
+      "url": "https://programs.sigchi.org/chi/2025/program/content/188999"
+    },
+    {
+      "where": "Crossref, Unpaywall, OpenAlex, Semantic Scholar metadata",
+      "what": "linked datasets, artifacts, or an OA licence",
+      "result": "partial",
+      "url": "https://api.crossref.org/works/10.1145/3706598.3713530"
+    }
+  ]
+}

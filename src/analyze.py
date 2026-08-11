@@ -11,6 +11,13 @@ This implements the statistical plan the paper declares in Sec. 5:
   * Friedman + Wilcoxon for the questionnaire data;
   * the two trial-exclusion filters of Sec. 5.
 
+A note on sphericity: pingouin warns that its epsilon estimates may be
+inaccurate for a two-way within design in which both factors have more than two
+levels, which is this design exactly. The pipeline therefore also computes
+Greenhouse-Geisser epsilon directly from the participant x level matrix and
+writes it to sphericity.csv, so the correction can be inspected rather than
+trusted.
+
 The paper's own dataset was never released (see SOURCES.md), so this pipeline
 cannot be pointed at it. It is written against the trial-level schema the
 paper's Sec. 4.3 measures imply, so it runs on any dataset with that schema.

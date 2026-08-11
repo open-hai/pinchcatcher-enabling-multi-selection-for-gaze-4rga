@@ -1,0 +1,404 @@
+{
+  "protocol": {
+    "design": "Single-session laboratory experiment, fully within-subject, 5 x 3. Factor 1: multi-selection technique, 5 levels (FullDH, SemiNDH, SemiDwell, SemiSwipe, SemiTilt), administered as five blocks. Factor 2: number of targets to be grouped, 3 levels (2, 4, 6), interleaved within each block. 30 participants, each experiencing all 15 cells. Block order counterbalanced with a 'Balanced Latin square' (Sec. 4.1.2); the paper does not state which square nor how many sequences, and with five (odd) conditions a carry-over-balanced Williams square requires 10 sequences rather than 5 - this repository assumes 10 with 3 participants each. Target-number order within a block is not stated. Apparatus: Meta Quest Pro (90 Hz display, 111.24 deg FoV) with its embedded 30 Hz eye tracker and hand tracking, driven by Unity 2022.3.9f1 and the Meta XR All-in-One SDK with Meta Hand Pose Detection. Session length about 50 minutes. Approved by the university IRB; participants paid $10 (Sec. 4.4).",
+    "trials": "225 recorded trials per participant: 5 techniques x 3 target numbers x 15 repetitions. Preceded within each block by two training phases using a reduced 10-sphere layout (the paper's '45 trials' figure for training is arithmetically inconsistent with 2 phases x 5 blocks and is recorded as a mismatch). Stimulus per trial: 40 sphere-shaped objects of 0.20 m radius at equal 1 m intervals on a flat grid window 58.12 deg wide and 25.06 deg high, presented 13.5 m from the participant, positions randomised each trial. Targets are blue, distractors white; the invisible gaze collider is three times the visible radius, i.e. 0.60 m. Trial structure (Sec. 4.2, Fig. 8): an inter-trial interval showing a central cross, exited by a full-release pinch; then the layout appears and timing begins; the participant groups all targets as fast as possible; the trial ends when a dominant-hand full pinch is held for 250 ms. A further inter-trial interval follows. Pinch states are read from thumb-index fingertip distance: semi-pinch between 2 and 7 cm, full release at 10 cm, full pinch on contact (never given numerically). Subselection confirmation depends on the technique: 500 ms gaze dwell (SemiDwell), leftward hand movement of an unstated distance (SemiSwipe), 30 deg rightward hand roll with the indicator geared 3x (SemiTilt), non-dominant-hand full pinch (SemiNDH), or dominant-hand full pinch while the non-dominant hand holds a full pinch (FullDH). After each block: a questionnaire and rest. After all five blocks: a ranking of the techniques and a brief open interview.",
+    "measures": [
+      {
+        "name": "task_completion_time",
+        "scale": "milliseconds, from target onset to the trial-ending full pinch",
+        "level": "per_trial"
+      },
+      {
+        "name": "accidental_subselection_ratio",
+        "scale": "percent; distractors grouped accidentally during the trial divided by the total subselections performed in that trial",
+        "level": "per_trial"
+      },
+      {
+        "name": "error_rate",
+        "scale": "percent; ungrouped targets plus distractors remaining in the final group, divided by the total objects grouped in that trial",
+        "level": "per_trial"
+      },
+      {
+        "name": "grouping_success_rate",
+        "scale": "percent of trials with no error in the final group",
+        "level": "per_participant"
+      },
+      {
+        "name": "inverse_efficiency",
+        "scale": "milliseconds; task completion time divided by the grouping success rate, so higher means less efficient",
+        "level": "per_participant"
+      },
+      {
+        "name": "hand_movement",
+        "scale": "metres; palm-centre translation summed over frames of the trial",
+        "level": "per_trial"
+      },
+      {
+        "name": "hand_rotation",
+        "scale": "degrees; palm-centre rotation summed over frames of the trial",
+        "level": "per_trial"
+      },
+      {
+        "name": "system_usability_scale",
+        "scale": "six-item variant, three positive and three negative statements on a 7-point Likert scale coded 0-6, negatives reverse-scored against 6; item wording never published",
+        "level": "per_participant"
+      },
+      {
+        "name": "nasa_tlx",
+        "scale": "six subscales (mental, physical and temporal demand, perceived performance, effort, frustration) on a 7-point Likert scale coded 0-6; raw, no weighting procedure described",
+        "level": "per_participant"
+      },
+      {
+        "name": "satisfaction",
+        "scale": "single question on a 7-point Likert scale coded 0-6; question wording never published",
+        "level": "per_participant"
+      },
+      {
+        "name": "technique_ranking",
+        "scale": "forced ranking of the five techniques, positions 1-5",
+        "level": "per_participant"
+      },
+      {
+        "name": "interview_themes",
+        "scale": "open interview on the reasons for the ranking, reported as themes with participant quotations; no coding scheme, codebook or reliability statistic published",
+        "level": "per_participant"
+      }
+    ],
+    "plan": "Two-way repeated-measures ANOVA on each continuous measure with technique (5) and target number (3) as within-subject factors, Bonferroni corrected, with a sphericity correction applied throughout (never named; the fractional degrees of freedom are consistent with Greenhouse-Geisser and the recovered epsilons all lie strictly between their lower bound and 1). Wilcoxon signed-rank tests for post-hoc comparisons on the accidental subselection ratio and error rate, because of violations of normality. Paired t-tests for post-hoc comparisons on the remaining continuous measures. Friedman tests with Wilcoxon signed-rank post-hoc for the non-parametric questionnaire data. Two exclusion filters: trials in which more than 50% of targets were not grouped are dropped from the completion-time and kinematic analyses (30 trials, 0.44%), and the completion-time analysis is repeated on error-free trials only (445 trials excluded, reported as 6.5%, which does not follow from 445 under either denominator). The Bonferroni family size is not stated.",
+    "reported": [
+      {
+        "metric": "task_completion_time",
+        "effect": "no main effect of multi-selection technique",
+        "test": "two-way RM ANOVA, sphericity corrected",
+        "value": "F(2.705, 78.457) = 1.028, p = .379, partial eta squared = .034",
+        "interval": "not reported; Fig. 9 shows 95% confidence intervals graphically only",
+        "n": 30,
+        "citation": "Sec. 5.1"
+      },
+      {
+        "metric": "task_completion_time",
+        "effect": "main effect of target number; time increases with the number of targets",
+        "test": "two-way RM ANOVA, sphericity corrected, with paired t-test post-hoc",
+        "value": "F(1.747, 50.673) = 725.511, p < .001, partial eta squared = .962; means 4381.942 ms (SD 1293.517) for 2 targets, 6691.875 ms (SD 2107.008) for 4, 9029.705 ms (SD 2359.307) for 6; all pairwise t(29) > 19.244, p < .001",
+        "interval": "SDs given; 95% CIs shown graphically in Fig. 9",
+        "n": 30,
+        "citation": "Sec. 5.1, Fig. 9"
+      },
+      {
+        "metric": "task_completion_time_error_free_trials",
+        "effect": "same pattern on the error-free subset: target number significant, technique not",
+        "test": "two-way RM ANOVA, sphericity corrected",
+        "value": "target number F(1.662, 48.192) = 749.745, p < .001, partial eta squared = .963; technique F(2.754, 79.873) = 1.276, p = .288; interaction F(4.794, 139.036) = .846, p = .516",
+        "interval": "means 4382.346 / 6656.641 / 9044.002 ms with SDs 1312.669 / 1989.346 / 2415.898",
+        "n": 30,
+        "citation": "Sec. 5.1"
+      },
+      {
+        "metric": "accidental_subselection_ratio",
+        "effect": "FullDH produced a higher accidental subselection ratio than every other technique; SemiSwipe lower than SemiDwell and SemiNDH",
+        "test": "two-way RM ANOVA, sphericity corrected, with Wilcoxon signed-rank post-hoc",
+        "value": "technique F(3.126, 90.641) = 9.550, p < .001, partial eta squared = .248; FullDH 8.650% (SD 7.633) vs SemiNDH 5.163% (4.984), SemiDwell 4.206% (5.032), SemiTilt 3.380% (3.177), SemiSwipe 2.436% (3.786), all Z > 2.746, p < .006; SemiSwipe vs SemiDwell Z = 2.067, p = .039; SemiSwipe vs SemiNDH Z = 2.552, p = .011",
+        "interval": "SDs given; 95% CIs shown graphically in Fig. 10A",
+        "n": 30,
+        "citation": "Sec. 5.2, Fig. 10A"
+      },
+      {
+        "metric": "error_rate",
+        "effect": "SemiSwipe lower than SemiDwell and SemiTilt but higher than FullDH; SemiDwell and SemiTilt higher than both FullDH and SemiNDH",
+        "test": "two-way RM ANOVA, sphericity corrected, with Wilcoxon signed-rank post-hoc",
+        "value": "technique F(2.208, 64.023) = 19.177, p < .001, partial eta squared = .398; SemiSwipe 2.767% (SD 5.928) vs SemiDwell 8.612% (11.483) Z = 4.088, p < .001, vs SemiTilt 11.648% (15.328) Z = 4.165, p < .001, vs FullDH 1.207% (3.599) Z = 2.974, p = .003; SemiNDH 1.854% (6.259)",
+        "interval": "SDs given; 95% CIs shown graphically in Fig. 10B. Note: the Fig. 10 caption contradicts this body text, naming SemiDwell and SemiSwipe rather than SemiDwell and SemiTilt as the high-error pair",
+        "n": 30,
+        "citation": "Sec. 5.3, Fig. 10B"
+      },
+      {
+        "metric": "inverse_efficiency",
+        "effect": "SemiNDH more efficient than SemiTilt, with the advantage growing from 4 targets upward; efficiency falls as target number rises",
+        "test": "two-way RM ANOVA, sphericity corrected, with paired t-test post-hoc",
+        "value": "technique F(2.606, 75.570) = 4.379 (printed p < .001; recomputes to p = .0094), partial eta squared = .131; SemiNDH 6719.815 ms (SD 1186.851) vs SemiTilt 8994.113 ms (3095.398); target number F(1.775, 51.469) = 274.505 (printed p = .009; recomputes to p = 3.7e-27), partial eta squared = .904, means 4795.791 / 7556.147 / 10495.514 ms; interaction F(4.916, 142.551) = 3.422, p = .006, with the SemiNDH advantage reaching delta = 2243.428 ms, t(29) = 3.408, p = .002 at 4 targets and delta = 3583.793 ms, t(29) = 4.686, p < .001 at 6",
+        "interval": "SDs given; 95% CIs shown graphically in Fig. 10C",
+        "n": 30,
+        "citation": "Sec. 5.4, Fig. 10C"
+      },
+      {
+        "metric": "hand_movement",
+        "effect": "every technique pair differed except SemiNDH versus SemiDwell; movement rose with target number",
+        "test": "two-way RM ANOVA, sphericity corrected, with paired t-test post-hoc",
+        "value": "technique F(1.339, 38.827) = 128.688, p < .001, partial eta squared = .816; SemiSwipe 1.470 m (SD .864) > SemiTilt .907 m (.443) > FullDH .275 m (.158) > SemiNDH .152 m (.085) ~ SemiDwell .143 m (.059), all t(29) > 5.542, p < .001 except SemiNDH vs SemiDwell t(29) = .677, p = .504; target number F(1.268, 36.780) = 261.889, p < .001, partial eta squared = .900",
+        "interval": "SDs given; 95% CIs shown graphically in Fig. 11A",
+        "n": 30,
+        "citation": "Sec. 5.5, Fig. 11A"
+      },
+      {
+        "metric": "hand_rotation",
+        "effect": "every technique pair differed except SemiNDH versus SemiDwell; rotation rose with target number",
+        "test": "two-way RM ANOVA, sphericity corrected, with paired t-test post-hoc",
+        "value": "technique F(1.352, 39.199) = 155.639, p < .001, partial eta squared = .843; SemiTilt 687.451 deg (SD 389.389) > SemiSwipe 219.246 deg (144.122) > FullDH 63.040 deg (31.155) > SemiNDH 26.903 deg (16.990) ~ SemiDwell 23.167 deg (10.555), all t(29) > 7.833, p < .001 except SemiNDH vs SemiDwell t(29) = 1.652, p = .109; target number F(1.404, 40.714) = 211.932, p < .001, partial eta squared = .880",
+        "interval": "SDs given; 95% CIs shown graphically in Fig. 11B",
+        "n": 30,
+        "citation": "Sec. 5.6, Fig. 11B"
+      },
+      {
+        "metric": "nasa_tlx_physical_demand",
+        "effect": "technique main effect: SemiNDH more physically demanding than SemiDwell and FullDH; SemiTilt more than SemiDwell",
+        "test": "Friedman with Wilcoxon signed-rank post-hoc",
+        "value": "chi squared(4) = 15.909, p = .003; SemiNDH vs SemiDwell Z = 3.666, p < .001; SemiNDH vs FullDH Z = 2.376, p = .017; SemiTilt vs SemiDwell Z = 2.902, p = .004",
+        "interval": "not reported numerically; 95% CIs shown graphically in Fig. 12A",
+        "n": 30,
+        "citation": "Sec. 5.7, Fig. 12A"
+      },
+      {
+        "metric": "nasa_tlx_perceived_performance",
+        "effect": "technique main effect: FullDH and SemiNDH rated higher than SemiTilt and SemiDwell; SemiSwipe higher than SemiTilt",
+        "test": "Friedman with Wilcoxon signed-rank post-hoc",
+        "value": "chi squared(4) = 20.358, p < .001; FullDH vs SemiTilt Z = 2.757, p = .006; SemiNDH vs SemiTilt Z = 2.421, p = .015; FullDH vs SemiDwell Z = 3.111, p = .002; SemiNDH vs SemiDwell Z = 1.975, p = .048; SemiSwipe vs SemiTilt Z = 2.445, p = .014",
+        "interval": "not reported numerically; 95% CIs shown graphically in Fig. 12A",
+        "n": 30,
+        "citation": "Sec. 5.7, Fig. 12A"
+      },
+      {
+        "metric": "system_usability_scale",
+        "effect": "all five techniques exceeded the minimum-usability criterion; no significant technique effect reported",
+        "test": "Friedman (no significant effect reported for SUS)",
+        "value": "all five averaged above 4.05 on the 0-6 scale, the stated criterion for minimum usability",
+        "interval": "not reported numerically; 95% CIs shown graphically in Fig. 12A",
+        "n": 30,
+        "citation": "Sec. 5.7, Fig. 12A"
+      },
+      {
+        "metric": "technique_ranking",
+        "effect": "SemiDwell and SemiSwipe most preferred, but SemiDwell also most disliked, indicating polarised preference",
+        "test": "descriptive count of first and last placements",
+        "value": "SemiDwell ranked first by 9 and last by 10; SemiSwipe ranked first by 8; FullDH ranked second by 11; SemiNDH ranked fourth by 11",
+        "interval": "not applicable; full ranking distribution shown graphically in Fig. 12B only",
+        "n": 30,
+        "citation": "Sec. 5.8, Fig. 12B"
+      },
+      {
+        "metric": "subselections_collected",
+        "effect": "total data volume analysed",
+        "test": "count",
+        "value": "28385 multi-selections including accidental subselections",
+        "interval": "not applicable",
+        "n": 30,
+        "citation": "Sec. 5"
+      }
+    ]
+  },
+  "analysis": {
+    "command": "python3 src/analyze.py {{INPUT}}",
+    "optional_arguments": {
+      "--questionnaire": "path to a per-participant questionnaire CSV with columns participant, technique, measure, score; enables the Friedman and Wilcoxon questionnaire analysis",
+      "--outdir": "output directory, default results/analysis"
+    },
+    "input": {
+      "format": "CSV, one row per recorded trial",
+      "columns": [
+        {
+          "name": "participant",
+          "type": "integer",
+          "unit": "participant identifier",
+          "required": true
+        },
+        {
+          "name": "technique",
+          "type": "string",
+          "unit": "one of FullDH, SemiNDH, SemiDwell, SemiSwipe, SemiTilt",
+          "required": true
+        },
+        {
+          "name": "target_number",
+          "type": "integer",
+          "unit": "targets to be grouped, one of 2, 4, 6",
+          "required": true
+        },
+        {
+          "name": "tct_ms",
+          "type": "float",
+          "unit": "milliseconds from target onset to the trial-ending full pinch",
+          "required": true
+        },
+        {
+          "name": "n_subselections",
+          "type": "integer",
+          "unit": "count of subselections performed in the trial, the accidental-ratio denominator",
+          "required": true
+        },
+        {
+          "name": "n_distractors_subselected",
+          "type": "integer",
+          "unit": "count of distractors grouped accidentally during the trial",
+          "required": true
+        },
+        {
+          "name": "n_targets_missed",
+          "type": "integer",
+          "unit": "count of targets absent from the final group",
+          "required": true
+        },
+        {
+          "name": "n_distractors_final",
+          "type": "integer",
+          "unit": "count of distractors present in the final group",
+          "required": true
+        },
+        {
+          "name": "n_grouped_final",
+          "type": "integer",
+          "unit": "size of the final group, the error-rate denominator",
+          "required": true
+        },
+        {
+          "name": "hand_movement_m",
+          "type": "float",
+          "unit": "metres of palm-centre translation during the trial",
+          "required": true
+        },
+        {
+          "name": "hand_rotation_deg",
+          "type": "float",
+          "unit": "degrees of palm-centre rotation during the trial",
+          "required": true
+        },
+        {
+          "name": "block",
+          "type": "integer",
+          "unit": "block index 0-4, used only for provenance",
+          "required": false
+        },
+        {
+          "name": "repetition",
+          "type": "integer",
+          "unit": "repetition index within the cell, used only for provenance",
+          "required": false
+        }
+      ]
+    },
+    "outputs": [
+      {
+        "path": "<outdir>/cell_means.csv",
+        "contents": "participant x technique x target-number cell means for every dependent measure, plus per-cell grouping success rate and inverse efficiency"
+      },
+      {
+        "path": "<outdir>/rm_anova.csv",
+        "contents": "two-way repeated-measures ANOVA for each measure, with uncorrected and Greenhouse-Geisser corrected p-values, epsilon and generalised eta squared"
+      },
+      {
+        "path": "<outdir>/rm_anova_tct_error_free.csv",
+        "contents": "the completion-time ANOVA repeated on error-free trials only, matching the paper's second pass"
+      },
+      {
+        "path": "<outdir>/posthoc.csv",
+        "contents": "pairwise comparisons over both factors for every measure, uncorrected and Bonferroni-corrected, using Wilcoxon signed-rank for the two measures the paper treats as non-normal and paired t-tests otherwise"
+      },
+      {
+        "path": "<outdir>/sphericity.csv",
+        "contents": "independently computed Greenhouse-Geisser epsilon per measure and factor"
+      },
+      {
+        "path": "<outdir>/questionnaire_friedman.csv",
+        "contents": "Friedman omnibus test per questionnaire measure (only when --questionnaire is supplied)"
+      },
+      {
+        "path": "<outdir>/questionnaire_posthoc.csv",
+        "contents": "Wilcoxon signed-rank pairwise post-hoc per questionnaire measure (only when --questionnaire is supplied)"
+      },
+      {
+        "path": "<outdir>/summary.json",
+        "contents": "run manifest: input path, exclusion counts and percentages under both filters, participant count, cell count, design levels observed, measures analysed"
+      }
+    ],
+    "verification_runs": [
+      "python3 src/make_synthetic_log.py --mode null --out results/synthetic_null.csv then python3 src/analyze.py results/synthetic_null.csv - no effects planted, and the pipeline returns null for completion time and both kinematic measures. The two ratio measures retain a target-number effect by construction, because their denominators scale with target count; this is a property of the paper's Sec. 4.3 definitions, not a pipeline fault, and is demonstrated separately in src/smoke_test.py.",
+      "python3 src/make_synthetic_log.py --mode planted --out results/synthetic_planted.csv then python3 src/analyze.py results/synthetic_planted.csv - recovers 709.5 ms per extra target against a planted 700.0 and 1018.4 ms of SemiTilt-minus-FullDH offset against a planted 1000.0.",
+      "The pipeline has never been run on the authors' data, which was never released. See UNVERIFIED.md items 1-4."
+    ]
+  },
+  "servability": {
+    "all_servable": false,
+    "components": [
+      {
+        "component": "O1 - the study session itself: 30 participants, five counterbalanced blocks of 225 trials on a Meta Quest Pro with eye and hand tracking (Sec. 4.2, 4.4)",
+        "servable": false,
+        "failed_criteria": [
+          "screen_based",
+          "no_experimenter",
+          "browser_measures",
+          "apparatus_recovered"
+        ],
+        "why": "The entire manipulation is a head-mounted display with an embedded 30 Hz eye tracker and camera hand tracking; a browser page cannot present a 13.5 m stereoscopic scene nor read thumb-index fingertip distance. An experimenter briefed participants on all five techniques and ran eye-tracking calibration before the first block. The Unity project was never released and, as Sec. 3.3.2 and Sec. 4.1.2 leave the swipe distance and grid dimensions unstated, it could not be rebuilt to specification either. Single-session is the one criterion this component passes."
+      },
+      {
+        "component": "O2 - performance findings over participants: completion time, accidental subselection ratio, error rate, inverse efficiency (Sec. 5.1-5.4)",
+        "servable": false,
+        "failed_criteria": [
+          "screen_based",
+          "browser_measures",
+          "apparatus_recovered"
+        ],
+        "why": "These measures are defined over subselection events generated by pinch-aperture and gaze input. A browser can time a click but cannot detect a semi-pinch, so the events being counted cannot arise. The interface that produced them was not released and is not fully specified."
+      },
+      {
+        "component": "O3 - hand movement and rotation findings over participants (Sec. 5.5, 5.6)",
+        "servable": false,
+        "failed_criteria": [
+          "screen_based",
+          "browser_measures",
+          "apparatus_recovered"
+        ],
+        "why": "Sec. 4.3 defines both as the summed palm-centre translation and rotation per frame. Palm pose in three dimensions is not observable from a web page, and the tracking that produced it is headset hardware."
+      },
+      {
+        "component": "O4 - NASA-TLX, SUS and satisfaction ratings and their Friedman tests (Sec. 5.7)",
+        "servable": false,
+        "failed_criteria": [
+          "screen_based",
+          "page_administrable",
+          "apparatus_recovered"
+        ],
+        "why": "The rating forms themselves would be trivial to serve, and this is the closest of the outer-loop components to servable. It still fails on three counts: each questionnaire is administered immediately after a block of the XR manipulation, which the page neither delivers nor can verify happened; the manipulation requires the headset; and Sec. 4.3 never prints the six SUS statements or the satisfaction question, so the instrument cannot be rebuilt even as a form."
+      },
+      {
+        "component": "O5 - preference ranking and the post-study open interview (Sec. 5.8)",
+        "servable": false,
+        "failed_criteria": [
+          "screen_based",
+          "no_experimenter",
+          "page_administrable",
+          "apparatus_recovered"
+        ],
+        "why": "The ranking survey alone would be page-administrable, but it ranks five techniques the participant must first have experienced in the headset, and Sec. 4.2 pairs it with a brief open interview conducted by an experimenter. The qualitative themes in Sec. 5.8.1-5.8.5 come from that conversation; no interview guide or codebook was published."
+      },
+      {
+        "component": "O6 - training-phase behaviour: 24.4 s and 10.77 multi-selections per phase (Sec. 4.2)",
+        "servable": false,
+        "failed_criteria": [
+          "screen_based",
+          "browser_measures",
+          "apparatus_recovered"
+        ],
+        "why": "Same instrumentation as the main task, on a reduced 10-sphere layout. It measures multi-selections performed with a semi-pinch, which a browser cannot detect."
+      },
+      {
+        "component": "O7 - pilot tuning of the 500 ms dwell (from 250/500/750 ms) and of the pinch-state thresholds (Sec. 3.2, 3.3.1)",
+        "servable": false,
+        "failed_criteria": [
+          "screen_based",
+          "no_experimenter",
+          "apparatus_recovered"
+        ],
+        "why": "Dwell time could in principle be swept in a browser, but the thing being tuned is fingertip-distance thresholding on headset hand tracking. The paper reports only that the authors 'tested several variations' and selected an 'affordable distance', with no stated criterion or sample, so there is no procedure to serve even if the apparatus existed."
+      },
+      {
+        "component": "O8 - participant demographics, prior-experience ratings, IRB consent and compensation (Sec. 4.4)",
+        "servable": true,
+        "failed_criteria": [],
+        "why": "This one genuinely is servable. Consent, demographics and the four prior-experience items (VR, controllers, hands, gaze, each on a 6-point 0-5 scale) are a single-session, screen-based, self-administered form with no apparatus and no experimenter in the loop, and every response is captured in the browser. It would characterise a sample rather than reproduce any finding, and the exact item wording is not published, but nothing about the instrument's form blocks serving it."
+      }
+    ]
+  },
+  "absent_reasons": {
+    "protocol": null,
+    "analysis": null
+  }
+}
