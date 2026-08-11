@@ -40,7 +40,7 @@ Three things.
 2. **An audit of the paper's own numbers** (`src/audit_reported_stats.py`) —
    87 internal-consistency checks over every statistic the paper prints. Since no
    dataset exists, this is the only way to test the reported results, and it
-   found four errors in the paper.
+   found five discrepancies in the paper.
 3. **A re-runnable analysis pipeline** (`src/analyze.py`) — the statistical plan
    the paper declares, implemented against the trial-level schema its measures
    imply, so it can be pointed at a new dataset with `{{INPUT}}`.
