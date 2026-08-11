@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "paper": {
+    "key": "10.1145/3706598.3713530",
+    "scheme": "doi",
+    "title": "PinchCatcher: Enabling Multi-selection for Gaze+Pinch",
+    "slug": "pinchcatcher-enabling-multi-selection-for-gaze"
+  },
+  "reproduction": {
+    "repo": "open-hai/pinchcatcher-enabling-multi-selection-for-gaze-4rga",
+    "created": "2026-08-11T07:02:00.76499926Z",
+    "method_digest": "sha256:cdecb0081dcbd2a6175771cab166370b169b3b552fb3cc184af84b69668a1355",
+    "verdict": "passed"
+  },
+  "redistribution": {
+    "third_party_data": false,
+    "review": "clear"
+  },
+  "findings": {
+    "present": true
+  }
+}
